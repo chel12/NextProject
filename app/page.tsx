@@ -1,10 +1,4 @@
-import {
-	Categories,
-	Container,
-	SortPopup,
-	Title,
-	TopBar,
-} from '@/components/shared';
+import { Container, Filters, Title, TopBar } from '@/components/shared';
 
 export default function Home() {
 	return (
@@ -18,6 +12,12 @@ export default function Home() {
 					{/*Филтьтрация*/}
 					<div className="w-[250px]">
 						<Filters />
+					</div>
+					{/*Список товаров*/}
+					<div className="flex-1">
+						<div className="flex flex-col gap-16">
+							список товаров
+						</div>
 					</div>
 				</div>
 			</Container>
