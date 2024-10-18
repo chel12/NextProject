@@ -2,6 +2,7 @@ import React from 'react';
 import { Title } from '.';
 import { FilterCheckbox } from './filter-checkbox';
 import { Input, RangeSlider } from '../ui';
+import { CheckboxFiltersGroup } from './checkbox-filters-group';
 
 interface Props {
 	className?: string;
@@ -37,6 +38,31 @@ export const Filters: React.FC<Props> = ({ className }) => {
 				<RangeSlider min={0} max={5000} step={10} value={[0, 5000]} />
 			</div>
 			{/* Содержимое*/}
+			<CheckboxFiltersGroup
+				title="Ингредиенты"
+				className="mt-5"
+				limit={6}
+				defaultItems={[
+					{ text: 'Например 1', value: '1' },
+					{ text: 'Например 2', value: '2' },
+					{ text: 'Например 3', value: '3' },
+					{ text: 'Например 4', value: '4' },
+					{ text: 'Например 5', value: '5' },
+					{ text: 'Например 6', value: '6' },
+					{ text: 'Например 7', value: '7' },
+					{ text: 'Например 8', value: '8' },
+				]}
+				items={[
+					{ text: 'Например 1', value: '1' },
+					{ text: 'Например 2', value: '2' },
+					{ text: 'Например 3', value: '3' },
+					{ text: 'Например 4', value: '4' },
+					{ text: 'Например 5', value: '5' },
+					{ text: 'Например 6', value: '6' },
+					{ text: 'Например 7', value: '7' },
+					{ text: 'Например 8', value: '8' },
+				]}
+			/>
 		</div>
 	);
 };

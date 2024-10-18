@@ -16,7 +16,7 @@ export default function Home() {
 					{/*Список товаров*/}
 					<div className="flex-1">
 						<div className="flex flex-col gap-16">
-							список товаров
+							Cписок товаров
 						</div>
 					</div>
 				</div>
