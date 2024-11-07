@@ -1,6 +1,7 @@
 import React from 'react';
 import { FilterCheckbox, FilterCheckboxProps } from './filter-checkbox';
 import { Input } from '../ui';
+import { on } from 'events';
 
 type Item = FilterCheckboxProps;
 interface Props {
@@ -24,13 +25,23 @@ export const CheckboxFiltersGroup: React.FC<Props> = ({
 	defaultValue,
 }) => {
 	const [showAll, setShowAll] = React.useState(true);
-	const list = showAll ? items : defaultItems?.slice(0, limit);
+	const [searchValue, setSearchValue] = React.useState('');
+	const list = showAll
+		? items.filter((item) =>
+				item.text.toLowerCase().includes(searchValue.toLowerCase())
+		  )
+		: defaultItems.slice(0, limit);
+	const onChangeSearchInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+		setSearchValue(e.target.value);
+	};
+
 	return (
 		<div className={className}>
 			<p className="font-bold mb-3">{title}</p>
 			{showAll && (
 				<div className="mb-5">
 					<Input
+						onChange={onChangeSearchInput}
 						placeholder={searchInputPlaceholder}
 						className="bg-gray-50 border-none"
 					/>
