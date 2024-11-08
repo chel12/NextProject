@@ -1,4 +1,5 @@
 import { Container, Filters, Title, TopBar } from '@/components/shared';
+import { ProductCard } from '@/components/shared/product-card';
 
 export default function Home() {
 	return (
@@ -17,6 +18,12 @@ export default function Home() {
 					<div className="flex-1">
 						<div className="flex flex-col gap-16">
 							Cписок товаров
+							<ProductCard
+								id={0}
+								name="azaza"
+								price={0}
+								imageUrl="https://img.freepik.com/premium-vector/cat-kitten-image_1138544-190058.jpg"
+							/>
 						</div>
 					</div>
 				</div>
