@@ -1,6 +1,7 @@
 import { Container, Filters, Title, TopBar } from '@/components/shared';
 import { ProductsGroupList } from '@/components/shared/products-group-list';
 
+
 export default function Home() {
 	return (
 		<>
@@ -97,7 +98,7 @@ export default function Home() {
 											'https://upload.wikimedia.org/wikipedia/ru/thumb/2/26/AC_Valhalla_standard_edition.jpg/274px-AC_Valhalla_standard_edition.jpg',
 									},
 								]}
-								categoryId={1}
+								categoryId={2}
 							/>
 						</div>
 					</div>
