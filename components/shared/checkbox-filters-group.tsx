@@ -1,7 +1,7 @@
 import React from 'react';
 import { FilterCheckbox, FilterCheckboxProps } from './filter-checkbox';
 import { Input } from '../ui';
-import { on } from 'events';
+
 
 type Item = FilterCheckboxProps;
 interface Props {
