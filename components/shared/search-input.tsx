@@ -3,6 +3,7 @@ import React from 'react';
 import { cn } from '@/lib/utils';
 import { Search } from 'lucide-react';
 import { useClickAway } from 'react-use';
+import Link from 'next/link';
 
 interface Props {
 	className?: string;
@@ -33,7 +34,29 @@ export const SearchInput: React.FC<Props> = ({ className }) => {
 					className="rounded-2xl outline-none w-full bg-gray-100 pl-11 "
 					type="text"
 					placeholder="Не нашли что искали?"
-					onFocus={() => setFocused(true)}></input>
+					onFocus={() => setFocused(true)}
+				/>
+				{/*поапап*/}
+				<div
+					className={cn(
+						'absolute w-full bg-white rounded-xl py-2 top-14 shadow-md transition-all duration-200 invisible opacity-0 z-30',
+						focused && 'visible opacity-100 top-12'
+					)}>
+					<Link
+						href="/product/1"
+						className="flex items-center gap-3 px-3 py-2 hover:bg-primary/10 ">
+						<img
+							src="https://umi.ru/images/cms/data/blog/new_tovar/new_good.webp"
+							alt="prod1"
+							className="rounded-sm h-8 w-8"
+						/>
+						<span
+						// onClick={onClickItem}
+						>
+							prod 1
+						</span>
+					</Link>
+				</div>
 			</div>
 		</>
 	);
