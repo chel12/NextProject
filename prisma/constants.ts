@@ -48,6 +48,24 @@ export const ingredients = [
 		ImageUrl:
 			'https://img.freepik.com/free-psd/christmas-gift-isolated_23-2151250408.jpg',
 	},
+	{
+		name: 'необычная упаковка',
+		price: 6,
+		ImageUrl:
+			'https://img.freepik.com/free-psd/christmas-gift-isolated_23-2151250408.jpg',
+	},
+	{
+		name: 'новогодняя упаковка',
+		price: 4,
+		ImageUrl:
+			'https://img.freepik.com/free-psd/christmas-gift-isolated_23-2151250408.jpg',
+	},
+	{
+		name: 'хеллуинская упаковка',
+		price: 5,
+		ImageUrl:
+			'https://img.freepik.com/free-psd/christmas-gift-isolated_23-2151250408.jpg',
+	},
 ].map((obj, index) => ({ id: index + 1, ...obj }));
 export const products = [
 	{
