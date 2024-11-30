@@ -6,14 +6,14 @@ import { useSet } from 'react-use';
 interface ReturnProps {
 	ingredients: Ingredient[];
 	loading: boolean;
-	selectedIds: Set<string>;
+	selectedIngredients: Set<string>;
 	onAddId: (id: string) => void;
 }
 
 export const useFilterIngredients = (): ReturnProps => {
 	const [ingredients, setIngredients] = React.useState<Ingredient[]>([]);
 	const [loading, setLoading] = React.useState<boolean>(true);
-	const [selectedIds, { toggle }] = useSet(new Set<string>([]));
+	const [selectedIngredients, { toggle }] = useSet(new Set<string>([]));
 
 	React.useEffect(() => {
 		async function fetchIngredients() {
@@ -38,5 +38,10 @@ export const useFilterIngredients = (): ReturnProps => {
 
 		fetchIngredients();
 	}, []);
-	return { ingredients, loading, onAddId: toggle, selectedIds };
+	return {
+		ingredients,
+		loading,
+		onAddId: toggle,
+		selectedIngredients,
+	};
 };
