@@ -5,26 +5,50 @@ import { Input, RangeSlider } from '../ui';
 import { CheckboxFiltersGroup } from './checkbox-filters-group';
 import { useFilterIngredients } from '@/hooks/useFilterIngredients';
 import { useSet } from 'react-use';
+import qs from 'qs';
+import { useRouter, useSearchParams } from 'next/navigation';
 
 interface PriceProps {
-	priceFrom: number;
-	priceTo: number;
+	priceFrom?: number;
+	priceTo?: number;
 }
 interface Props {
 	className?: string;
 }
+interface QueryFilters extends PriceProps {
+	gameTypes: string;
+	platforms: string;
+	ingredients: string;
+}
 
 export const Filters: React.FC<Props> = ({ className }) => {
+	const searchParams = useSearchParams() as unknown as Map<
+		keyof QueryFilters,
+		string
+	>;
+	const router = useRouter();
 	const [prices, setPrice] = React.useState<PriceProps>({
-		priceFrom: 0,
-		priceTo: 5000,
+		priceFrom: Number(searchParams.get('priceFrom')) || undefined,
+		priceTo: Number(searchParams.get('priceTo')) || undefined,
 	});
 
-	const [platforms, { toggle: togglePlatform }] = useSet(new Set<string>([]));
-	const [gameTypes, { toggle: toggleGameType }] = useSet(new Set<string>([]));
+	const [platforms, { toggle: togglePlatform }] = useSet(
+		new Set<string>(
+			searchParams.has('platforms')
+				? searchParams.get('platforms')?.split(',')
+				: []
+		)
+	);
+	const [gameTypes, { toggle: toggleGameType }] = useSet(
+		new Set<string>(
+			searchParams.has('gameTypes')
+				? searchParams.get('gameTypes')?.split(',')
+				: []
+		)
+	);
 
 	const { ingredients, loading, onAddId, selectedIngredients } =
-		useFilterIngredients();
+		useFilterIngredients(searchParams.get('ingredients')?.split(','));
 
 	const items = ingredients.map((item) => ({
 		value: String(item.id),
@@ -36,9 +60,19 @@ export const Filters: React.FC<Props> = ({ className }) => {
 			[name]: value,
 		});
 	};
+
 	useEffect(() => {
-		console.log(platforms, gameTypes, selectedIngredients, prices);
-	}, [platforms, gameTypes, selectedIngredients, prices]);
+		const filters = {
+			...prices,
+			gameTypes: Array.from(gameTypes),
+			platforms: Array.from(platforms),
+			ingredients: Array.from(selectedIngredients),
+		};
+		const query = qs.stringify(filters, { arrayFormat: 'comma' });
+		router.push(`?${query}`, {
+			scroll: false,
+		});
+	}, [platforms, gameTypes, selectedIngredients, prices, router]);
 
 	return (
 		<div className={className}>
@@ -100,7 +134,7 @@ export const Filters: React.FC<Props> = ({ className }) => {
 					min={0}
 					max={5000}
 					step={10}
-					value={[prices.priceFrom, prices.priceTo]}
+					value={[prices.priceFrom || 0, prices.priceTo || 5000]}
 					onValueChange={([priceFrom, priceTo]) =>
 						setPrice({ priceFrom, priceTo })
 					}
