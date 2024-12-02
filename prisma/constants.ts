@@ -104,4 +104,34 @@ export const products = [
 		imageUrl:
 			'https://e7.pngegg.com/pngimages/1008/303/png-clipart-shopping-cart-icon-product-return-shopping-cart-retail-supermarket-thumbnail.png',
 	},
+	{
+		name: 'Product 7',
+		categoryId: 4,
+		imageUrl:
+			'https://e7.pngegg.com/pngimages/1008/303/png-clipart-shopping-cart-icon-product-return-shopping-cart-retail-supermarket-thumbnail.png',
+	},
+	{
+		name: 'Product 8',
+		categoryId: 5,
+		imageUrl:
+			'https://e7.pngegg.com/pngimages/1008/303/png-clipart-shopping-cart-icon-product-return-shopping-cart-retail-supermarket-thumbnail.png',
+	},
+	{
+		name: 'Product 9',
+		categoryId: 6,
+		imageUrl:
+			'https://e7.pngegg.com/pngimages/1008/303/png-clipart-shopping-cart-icon-product-return-shopping-cart-retail-supermarket-thumbnail.png',
+	},
+	{
+		name: 'Product 10',
+		categoryId: 7,
+		imageUrl:
+			'https://e7.pngegg.com/pngimages/1008/303/png-clipart-shopping-cart-icon-product-return-shopping-cart-retail-supermarket-thumbnail.png',
+	},
+	{
+		name: 'Product 11',
+		categoryId: 8,
+		imageUrl:
+			'https://e7.pngegg.com/pngimages/1008/303/png-clipart-shopping-cart-icon-product-return-shopping-cart-retail-supermarket-thumbnail.png',
+	},
 ];
