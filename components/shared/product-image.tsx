@@ -5,7 +5,6 @@ interface Props {
 	className?: string;
 	imageUrl: string;
 	size: number;
-	alt: string;
 }
 
 export const ProductImage: React.FC<Props> = ({
@@ -14,7 +13,11 @@ export const ProductImage: React.FC<Props> = ({
 	className,
 }) => {
 	return (
-		<div className={className}>
+		<div
+			className={cn(
+				'flex items-center justify-center flex-1 relative w-full',
+				className
+			)}>
 			<img
 				src={imageUrl}
 				alt="Icon"
