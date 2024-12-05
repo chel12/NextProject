@@ -1,24 +1,15 @@
 'use client';
 import { cn } from '@/lib/utils';
 import { useCategoryStore } from '@/store/category';
+import { Category } from '@prisma/client';
 import React from 'react';
 
 interface Props {
+	items: Category[];
 	className?: string;
 }
 
-const cats = [
-	{ id: 1, name: 'Шутеры' },
-	{ id: 2, name: 'Экшен' },
-	{ id: 3, name: 'Стратегия' },
-	{ id: 4, name: 'Гонки' },
-	{ id: 5, name: 'Симуляторы' },
-	{ id: 6, name: 'Военная тематика' },
-	{ id: 7, name: 'Выживание' },
-	{ id: 8, name: 'Хоррор' },
-];
-
-export const Categories: React.FC<Props> = ({ className }) => {
+export const Categories: React.FC<Props> = ({ items, className }) => {
 	const categoryActiveId = useCategoryStore((state) => state.activeId);
 	return (
 		<div
@@ -26,7 +17,7 @@ export const Categories: React.FC<Props> = ({ className }) => {
 				'inline-flex gap-1 bg-gray-50 p-1 rounded-2xl',
 				className
 			)}>
-			{cats.map(({ name, id }, index) => (
+			{items.map(({ name, id }, index) => (
 				<a
 					className={cn(
 						'flex items-center font-bold h-11 rounded-2xl px-5',
