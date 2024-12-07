@@ -1,18 +1,11 @@
-import type { Metadata } from 'next';
 import { Nunito } from 'next/font/google';
 import './globals.css';
-import { Header } from '@/components/shared/header';
 
 const nunito = Nunito({
 	subsets: ['cyrillic'],
 	variable: '--font-nunito',
 	weight: ['400', '500', '600', '700', '800', '900'],
 });
-
-export const metadata: Metadata = {
-	title: 'Next Game | Главная',
-	description: 'Интернет магазин на тему компьютерных игр',
-};
 
 export default function RootLayout({
 	children,
@@ -21,12 +14,10 @@ export default function RootLayout({
 }>) {
 	return (
 		<html lang="en">
-			<body className={nunito.className}>
-				<main className="min-h-screen">
-					<Header/>
-					{children}
-					</main>
-			</body>
+			<head>
+				<link data-rh="true" rel="icon" href="/logo.jpg" />
+			</head>
+			<body className={nunito.className}>{children}</body>
 		</html>
 	);
 }
