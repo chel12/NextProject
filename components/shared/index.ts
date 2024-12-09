@@ -7,6 +7,6 @@ export { SortPopup } from './sort-popup';
 export { TopBar } from './top-bar';
 export { Filters } from './filters';
 export { FilterCheckbox } from './filter-checkbox';
-export { ProductImage } from './product-image';
+export { GameImage } from './game-image';
 export { ChooseProductForm } from './choose-product-form';
 export * from './modals';

@@ -8,6 +8,7 @@ import { cn } from '@/lib/utils';
 import { useRouter } from 'next/navigation';
 import { ChooseProductForm } from '..';
 import { ProductWithRelations } from '@/@types/prisma';
+import { ChooseGameForm } from '../choose-game-form';
 
 interface Props {
 	product: ProductWithRelations;
@@ -27,7 +28,11 @@ export const ChooseProductModal: React.FC<Props> = ({ product, className }) => {
 						className
 					)}>
 					{isCrossPlatform ? (
-						'Game'
+						<ChooseGameForm
+							imageUrl={product.imageUrl}
+							name={product.name}
+							ingredients={[]}
+						/>
 					) : (
 						<ChooseProductForm
 							imageUrl={product.imageUrl}

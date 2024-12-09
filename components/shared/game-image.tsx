@@ -7,11 +7,7 @@ interface Props {
 	size: 1 | 2 | 3;
 }
 
-export const ProductImage: React.FC<Props> = ({
-	imageUrl,
-	size,
-	className,
-}) => {
+export const GameImage: React.FC<Props> = ({ imageUrl, size, className }) => {
 	return (
 		<div
 			className={cn(
