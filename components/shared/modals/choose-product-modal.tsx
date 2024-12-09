@@ -7,16 +7,17 @@ import { Title } from '../title';
 import { cn } from '@/lib/utils';
 import { useRouter } from 'next/navigation';
 import { ChooseProductForm } from '..';
+import { ProductWithRelations } from '@/@types/prisma';
 
 interface Props {
-	product: Product;
+	product: ProductWithRelations;
 	className?: string;
 }
 
 export const ChooseProductModal: React.FC<Props> = ({ product, className }) => {
 	//для бека из модалки
 	const router = useRouter();
-	const isCrossPlatform = product
+	const isCrossPlatform = Boolean(product.items[0].gameType);
 	return (
 		<div>
 			<Dialog open={Boolean(product)} onOpenChange={() => router.back()}>
@@ -25,11 +26,15 @@ export const ChooseProductModal: React.FC<Props> = ({ product, className }) => {
 						'p-0 w-[1060px] max-w-[1060px] min-h-[500px] bg-white overflow-hidden',
 						className
 					)}>
-					<ChooseProductForm
-						imageUrl={product.imageUrl}
-						name={product.name}
-						ingredients={[]}
-					/>
+					{isCrossPlatform ? (
+						'Game'
+					) : (
+						<ChooseProductForm
+							imageUrl={product.imageUrl}
+							name={product.name}
+							ingredients={[]}
+						/>
+					)}
 				</DialogContent>
 			</Dialog>
 		</div>
