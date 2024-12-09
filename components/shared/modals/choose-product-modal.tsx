@@ -6,6 +6,7 @@ import { DialogContent, DialogTitle } from '@/components/ui/dialog';
 import { Title } from '../title';
 import { cn } from '@/lib/utils';
 import { useRouter } from 'next/navigation';
+import { ChooseProductForm } from '..';
 
 interface Props {
 	product: Product;
@@ -15,6 +16,7 @@ interface Props {
 export const ChooseProductModal: React.FC<Props> = ({ product, className }) => {
 	//для бека из модалки
 	const router = useRouter();
+	const isCrossPlatform = product
 	return (
 		<div>
 			<Dialog open={Boolean(product)} onOpenChange={() => router.back()}>
@@ -23,7 +25,11 @@ export const ChooseProductModal: React.FC<Props> = ({ product, className }) => {
 						'p-0 w-[1060px] max-w-[1060px] min-h-[500px] bg-white overflow-hidden',
 						className
 					)}>
-					<Title>{product.name}</Title>
+					<ChooseProductForm
+						imageUrl={product.imageUrl}
+						name={product.name}
+						ingredients={[]}
+					/>
 				</DialogContent>
 			</Dialog>
 		</div>
