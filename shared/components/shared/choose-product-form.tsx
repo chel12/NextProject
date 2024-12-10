@@ -1,4 +1,4 @@
-import { cn } from '@/lib/utils';
+import { cn } from '@/shared/lib/utils';
 import React from 'react';
 import { Title } from '.';
 import { Button } from '../ui';
@@ -7,7 +7,6 @@ interface Props {
 	imageUrl: string;
 	name: string;
 	className?: string;
-	items?: any;
 	onClickAdd?: VoidFunction;
 }
 
@@ -15,7 +14,6 @@ export const ChooseProductForm: React.FC<Props> = ({
 	className,
 	imageUrl,
 	name,
-	items,
 	onClickAdd,
 }) => {
 	const textDetails = `la la zaglushka`;

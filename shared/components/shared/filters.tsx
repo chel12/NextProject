@@ -3,7 +3,7 @@ import React from 'react';
 import { Title } from '.';
 import { Input, RangeSlider } from '../ui';
 import { CheckboxFiltersGroup } from './checkbox-filters-group';
-import { useFilters, useIngredients, useQueryFilters } from '@/hooks';
+import { useFilters, useIngredients, useQueryFilters } from '@/shared/hooks';
 interface Props {
 	className?: string;
 }
