@@ -8,6 +8,8 @@ import {
 	GameType,
 	gameEdition,
 	gameType,
+	mapGameEdition,
+	mapGameType,
 } from '@/shared/constants/game';
 import { Ingredient, ProductItem } from '@prisma/client';
 import { useSet } from 'react-use';
@@ -36,15 +38,37 @@ export const ChooseGameForm: React.FC<Props> = ({
 		new Set<Number>([])
 	);
 
-	const textDetails = `Игра ${name} для ${gameEdition[platformType].name} в издание ${gameType[type].name}`;
+	const handleClickAdd = () => {
+		onClickAddCart?.();
+		console.log({ type, platformType });
+	};
+
+	const textDetails = `Игра ${name} для ${mapGameEdition[platformType]} в издание ${mapGameType[type]}`;
+
+	/*прайс выбранных игр в зависимости от типа и платформы*/
 	const gamePrice =
 		items.find(
 			(item) => item.gameType == type && item.platformType == platformType
 		)?.price || 0;
+
+	/*прайс за всё выбранные ингредиенты*/
 	const totalIngredientsPrice = ingredients
 		.filter((ingredient) => selectedIngredients.has(ingredient.id))
 		.reduce((acc, ingredient) => acc + ingredient.price, 0);
+
+	/*итоговый прайс: игра + доп. ингредиенты*/
 	const totalPrice = gamePrice + totalIngredientsPrice;
+	/*Сначала отбираем по типу Издания*/
+	const availableGameTypes = items.filter((item) => item.gameType == type);
+
+	/*Потом отбираем по платформе*/
+	const availablePlatformTypes = gameEdition.map((item) => ({
+		name: item.name,
+		value: item.value,
+		disabled: !availableGameTypes.some(
+			(game) => Number(game.platformType) == Number(item.value)
+		),
+	}));
 
 	return (
 		<div className={cn(className, 'flex flex-1')}>
@@ -54,7 +78,7 @@ export const ChooseGameForm: React.FC<Props> = ({
 				<p className="text-gray-400">{textDetails}</p>
 				<div className="flex flex-col gap-4 mt-5">
 					<GroupVariants
-						items={gameEdition}
+						items={availablePlatformTypes}
 						value={String(platformType)}
 						onClick={(value) =>
 							setPlatformType(Number(value) as GameEdition)
@@ -82,7 +106,9 @@ export const ChooseGameForm: React.FC<Props> = ({
 						))}
 					</div>
 				</div>
-				<Button className="h-[55px] px-10 text-base rounded-[18px] w-full mt-10">
+				<Button
+					onClick={handleClickAdd}
+					className="h-[55px] px-10 text-base rounded-[18px] w-full mt-10">
 					Добавить в корзину за {totalPrice}Р
 				</Button>
 			</div>
