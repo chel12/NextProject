@@ -1,6 +1,6 @@
 import { cn } from '@/shared/lib/utils';
 import React from 'react';
-import { GameImage, Title } from '.';
+import { GameImage, IngredientItem, Title } from '.';
 import { Button } from '../ui';
 import { GroupVariants } from './group-variants';
 import {
@@ -9,12 +9,13 @@ import {
 	gameEdition,
 	gameType,
 } from '@/shared/constants/game';
+import { Ingredient } from '@prisma/client';
 
 interface Props {
 	imageUrl: string;
 	name: string;
 	className?: string;
-	ingredients: any;
+	ingredients: Ingredient[];
 	items?: any;
 	onClickAdd?: VoidFunction;
 }
@@ -38,18 +39,32 @@ export const ChooseGameForm: React.FC<Props> = ({
 			<div className="w-[490px] bg-[#F7F6F5] p-7">
 				<Title text={name} size="md" className="font-extrabold mb-1" />
 				<p className="text-gray-400">{textDetails}</p>
-				<GroupVariants
-					items={gameEdition}
-					value={String(edition)}
-					onClick={(value) =>
-						setEdition(Number(value) as GameEdition)
-					}
-				/>
-				<GroupVariants
-					items={gameType}
-					value={String(type)}
-					onClick={(value) => setType(Number(value) as GameType)}
-				/>
+
+				<div className="flex flex-col gap-4 mt-5">
+					<GroupVariants
+						items={gameEdition}
+						value={String(edition)}
+						onClick={(value) =>
+							setEdition(Number(value) as GameEdition)
+						}
+					/>
+					<GroupVariants
+						items={gameType}
+						value={String(type)}
+						onClick={(value) => setType(Number(value) as GameType)}
+					/>
+				</div>
+				<div className="grid grid-cols-3 gap-3">
+					{ingredients.map((ingredient) => (
+						<IngredientItem
+							key={ingredient.id}
+							name={ingredient.name}
+							price={ingredient.price}
+							imageUrl={ingredient.ImageUrl}
+							onClick={onClickAdd}
+						/>
+					))}
+				</div>
 				<Button className="h-[55px] px-10 text-base rounded-[18px] w-full mt-10">
 					Добавить в корзину за {totalPrice} Р
 				</Button>

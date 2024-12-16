@@ -9,4 +9,5 @@ export { Filters } from './filters';
 export { FilterCheckbox } from './filter-checkbox';
 export { GameImage } from './game-image';
 export { ChooseProductForm } from './choose-product-form';
+export { IngredientItem } from './ingredient-item';
 export * from './modals';
