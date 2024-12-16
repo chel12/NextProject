@@ -45,6 +45,11 @@ export const ChooseGameForm: React.FC<Props> = ({
 						setEdition(Number(value) as GameEdition)
 					}
 				/>
+				<GroupVariants
+					items={gameType}
+					value={String(type)}
+					onClick={(value) => setType(Number(value) as GameType)}
+				/>
 				<Button className="h-[55px] px-10 text-base rounded-[18px] w-full mt-10">
 					Добавить в корзину за {totalPrice} Р
 				</Button>

@@ -14,5 +14,9 @@ export const gameEdition = Object.entries(mapGameEdition).map(
 		value,
 	})
 );
+export const gameType = Object.entries(mapGameType).map(([value, name]) => ({
+	name,
+	value,
+}));
 export type GameEdition = keyof typeof mapGameEdition;
 export type GameType = keyof typeof mapGameType;
