@@ -53,7 +53,7 @@ model ProductItem {
 	id Int @id @default(autoincrement())
 
 	price Int
-	size Int?
+	platformType Int?
 	gameType Int?
 
 	cartItems CartItem[]

@@ -9,17 +9,17 @@ const randomNumber = (min: number, max: number) => {
 const generateProductItem = ({
 	productId,
 	gameType,
-	size,
+	platformType,
 }: {
 	productId: number;
 	gameType?: 1 | 2;
-	size?: 1 | 2 | 3;
+	platformType?: 1 | 2 | 3;
 }) => {
 	return {
 		productId,
 		price: randomNumber(100, 1000),
 		gameType,
-		size,
+		platformType,
 	} as Prisma.ProductItemUncheckedCreateInput;
 };
 
@@ -87,19 +87,63 @@ async function up() {
 	await prisma.productItem.createMany({
 		data: [
 			//game 1
-			generateProductItem({ productId: game1.id, gameType: 1, size: 1 }),
-			generateProductItem({ productId: game1.id, gameType: 2, size: 3 }),
+			generateProductItem({
+				productId: game1.id,
+				gameType: 1,
+				platformType: 1,
+			}),
+			generateProductItem({
+				productId: game1.id,
+				gameType: 2,
+				platformType: 3,
+			}),
 			//game 2
-			generateProductItem({ productId: game2.id, gameType: 1, size: 1 }),
-			generateProductItem({ productId: game2.id, gameType: 1, size: 2 }),
-			generateProductItem({ productId: game2.id, gameType: 1, size: 3 }),
-			generateProductItem({ productId: game2.id, gameType: 2, size: 1 }),
-			generateProductItem({ productId: game2.id, gameType: 2, size: 2 }),
-			generateProductItem({ productId: game2.id, gameType: 2, size: 3 }),
+			generateProductItem({
+				productId: game2.id,
+				gameType: 1,
+				platformType: 1,
+			}),
+			generateProductItem({
+				productId: game2.id,
+				gameType: 1,
+				platformType: 2,
+			}),
+			generateProductItem({
+				productId: game2.id,
+				gameType: 1,
+				platformType: 3,
+			}),
+			generateProductItem({
+				productId: game2.id,
+				gameType: 2,
+				platformType: 1,
+			}),
+			generateProductItem({
+				productId: game2.id,
+				gameType: 2,
+				platformType: 2,
+			}),
+			generateProductItem({
+				productId: game2.id,
+				gameType: 2,
+				platformType: 3,
+			}),
 			//game 3
-			generateProductItem({ productId: game3.id, gameType: 1, size: 1 }),
-			generateProductItem({ productId: game3.id, gameType: 2, size: 1 }),
-			generateProductItem({ productId: game3.id, gameType: 2, size: 2 }),
+			generateProductItem({
+				productId: game3.id,
+				gameType: 1,
+				platformType: 1,
+			}),
+			generateProductItem({
+				productId: game3.id,
+				gameType: 2,
+				platformType: 1,
+			}),
+			generateProductItem({
+				productId: game3.id,
+				gameType: 2,
+				platformType: 2,
+			}),
 			//остальные игры
 			generateProductItem({ productId: 1 }),
 			generateProductItem({ productId: 2 }),
