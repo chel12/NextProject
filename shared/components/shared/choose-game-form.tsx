@@ -9,15 +9,17 @@ import {
 	gameEdition,
 	gameType,
 } from '@/shared/constants/game';
-import { Ingredient } from '@prisma/client';
+import { Ingredient, ProductItem } from '@prisma/client';
+import { useSet } from 'react-use';
+
 
 interface Props {
 	imageUrl: string;
 	name: string;
 	className?: string;
 	ingredients: Ingredient[];
-	items?: any;
-	onClickAdd?: VoidFunction;
+	items?: ProductItem;
+	onClickAddCart?: VoidFunction;
 }
 
 export const ChooseGameForm: React.FC<Props> = ({
@@ -26,10 +28,14 @@ export const ChooseGameForm: React.FC<Props> = ({
 	ingredients,
 	name,
 	items,
-	onClickAdd,
+	onClickAddCart,
 }) => {
 	const [edition, setEdition] = React.useState<GameEdition>(1);
 	const [type, setType] = React.useState<GameType>(1);
+	const [selectedIngredients, { toggle: addIngredient }] = useSet(
+		new Set<Number>([])
+	);
+
 	const textDetails = `${name} ${ingredients} ${items}`;
 	const totalPrice = 1000;
 
@@ -63,7 +69,8 @@ export const ChooseGameForm: React.FC<Props> = ({
 								name={ingredient.name}
 								price={ingredient.price}
 								imageUrl={ingredient.ImageUrl}
-								onClick={onClickAdd}
+								onClick={() => addIngredient(ingredient.id)}
+								active={selectedIngredients.has(ingredient.id)}
 							/>
 						))}
 					</div>

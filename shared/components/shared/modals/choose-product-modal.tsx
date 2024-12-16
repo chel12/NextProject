@@ -1,7 +1,5 @@
 'use client';
 import React from 'react';
-import { Product } from '@prisma/client';
-import { Title } from '../title';
 import { cn } from '@/shared/lib/utils';
 import { useRouter } from 'next/navigation';
 import { ChooseProductForm } from '..';
@@ -32,6 +30,7 @@ export const ChooseProductModal: React.FC<Props> = ({ product, className }) => {
 							imageUrl={product.imageUrl}
 							name={product.name}
 							ingredients={product.ingredients}
+							items={product.items}
 						/>
 					) : (
 						<ChooseProductForm
