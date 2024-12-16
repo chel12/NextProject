@@ -31,16 +31,20 @@ export const ChooseGameForm: React.FC<Props> = ({
 }) => {
 	const [platformType, setPlatformType] = React.useState<GameEdition>(1);
 	const [type, setType] = React.useState<GameType>(1);
-	
+
 	const [selectedIngredients, { toggle: addIngredient }] = useSet(
 		new Set<Number>([])
 	);
 
-	const textDetails = `${name} название`;
-	const gamePrice = items.find(
-		(item) => item.gameType == type && item.platformType == platformType
-	)?.price;
-	const totalPrice = gamePrice;
+	const textDetails = `Игра ${name} для ${gameEdition[platformType].name} в издание ${gameType[type].name}`;
+	const gamePrice =
+		items.find(
+			(item) => item.gameType == type && item.platformType == platformType
+		)?.price || 0;
+	const totalIngredientsPrice = ingredients
+		.filter((ingredient) => selectedIngredients.has(ingredient.id))
+		.reduce((acc, ingredient) => acc + ingredient.price, 0);
+	const totalPrice = gamePrice + totalIngredientsPrice;
 
 	return (
 		<div className={cn(className, 'flex flex-1')}>

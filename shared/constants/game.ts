@@ -4,9 +4,9 @@ export const mapGameEdition = {
 	3: 'PS5',
 } as const;
 export const mapGameType = {
-	1: 'Цифровое',
-	2: 'На диске',
-};
+	1: 'Цифровая',
+	2: 'Дисковая',
+} as const;
 //делаем массив сущностей для группы вариантов
 export const gameEdition = Object.entries(mapGameEdition).map(
 	([value, name]) => ({
