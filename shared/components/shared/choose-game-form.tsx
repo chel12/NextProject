@@ -3,16 +3,11 @@ import React from 'react';
 import { GameImage, IngredientItem, Title } from '.';
 import { Button } from '../ui';
 import { GroupVariants } from './group-variants';
-import {
-	GameEdition,
-	GameType,
-	gameEdition,
-	gameType,
-	mapGameEdition,
-	mapGameType,
-} from '@/shared/constants/game';
+import { GameEdition, GameType, gameType } from '@/shared/constants/game';
 import { Ingredient, ProductItem } from '@prisma/client';
-import { useSet } from 'react-use';
+
+import { useGameOptions } from '@/shared/hooks';
+import { getGameDetails } from '@/shared/lib';
 
 interface Props {
 	imageUrl: string;
@@ -31,56 +26,27 @@ export const ChooseGameForm: React.FC<Props> = ({
 	items,
 	onClickAddCart,
 }) => {
-	const [platformType, setPlatformType] = React.useState<GameEdition>(1);
-	const [type, setType] = React.useState<GameType>(1);
+	const {
+		platformType,
+		type,
+		selectedIngredients,
+		availableTypes,
+		setType,
+		setPlatformType,
+		addIngredient,
+	} = useGameOptions(items);
 
-	const [selectedIngredients, { toggle: addIngredient }] = useSet(
-		new Set<number>([])
+	const { textDetails, totalPrice } = getGameDetails(
+		type,
+		platformType,
+		items,
+		ingredients,
+		selectedIngredients
 	);
-
 	const handleClickAdd = () => {
 		onClickAddCart?.();
 		console.log({ type, platformType });
 	};
-
-	const textDetails = `Игра ${name} для ${mapGameEdition[platformType]} в издание ${mapGameType[type]}`;
-
-	/*прайс выбранных игр в зависимости от типа и платформы*/
-	const gamePrice =
-		items.find(
-			(item) => item.gameType == type && item.platformType == platformType
-		)?.price || 0;
-
-	/*прайс за всё выбранные ингредиенты*/
-	const totalIngredientsPrice = ingredients
-		.filter((ingredient) => selectedIngredients.has(ingredient.id))
-		.reduce((acc, ingredient) => acc + ingredient.price, 0);
-
-	/*итоговый прайс: игра + доп. ингредиенты*/
-	const totalPrice = gamePrice + totalIngredientsPrice;
-	/*Сначала отбираем по типу Издания*/
-	const availableGameTypes = items.filter((item) => item.gameType == type);
-
-	/*Потом отбираем по платформе*/
-	const availablePlatformTypes = gameEdition.map((item) => ({
-		name: item.name,
-		value: item.value,
-		disabled: !availableGameTypes.some(
-			(game) => Number(game.platformType) == Number(item.value)
-		),
-	}));
-	//проверка изданияи типов его, покажет первое доступное
-	React.useEffect(() => {
-		const isAvailablePlatform = availablePlatformTypes?.find(
-			(item) => Number(item.value) == platformType && !item.disabled
-		);
-		const availablePlatform = availablePlatformTypes?.find(
-			(item) => !item.disabled
-		);
-		if (!isAvailablePlatform && availablePlatform) {
-			setPlatformType(Number(availablePlatform.value) as GameEdition);
-		}
-	}, [type]);
 
 	return (
 		<div className={cn(className, 'flex flex-1')}>
@@ -90,7 +56,7 @@ export const ChooseGameForm: React.FC<Props> = ({
 				<p className="text-gray-400">{textDetails}</p>
 				<div className="flex flex-col gap-4 mt-5">
 					<GroupVariants
-						items={availablePlatformTypes}
+						items={availableTypes}
 						value={String(platformType)}
 						onClick={(value) =>
 							setPlatformType(Number(value) as GameEdition)
