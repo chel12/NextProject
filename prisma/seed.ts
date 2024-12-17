@@ -58,7 +58,7 @@ async function up() {
 				'https://gaming-cdn.com/images/products/1620/orig/call-of-duty-4-modern-warfare-pc-mac-game-steam-cover.jpg?v=1701179820',
 			categoryId: 1,
 			ingredients: {
-				connect: ingredients.slice(0, 4),
+				connect: ingredients.slice(0, 6),
 			},
 		},
 	});
@@ -69,7 +69,7 @@ async function up() {
 				'https://cdn.kanobu.ru/games/72/25478a08b5414e78a1cb4764e959004d',
 			categoryId: 2,
 			ingredients: {
-				connect: ingredients.slice(0, 4),
+				connect: ingredients.slice(0, 7),
 			},
 		},
 	});
@@ -80,7 +80,7 @@ async function up() {
 				'https://cdn.kanobu.ru/games/31/f19e86587b7f4341a77839717de01841',
 			categoryId: 2,
 			ingredients: {
-				connect: ingredients.slice(0, 4),
+				connect: ingredients.slice(0, 8),
 			},
 		},
 	});

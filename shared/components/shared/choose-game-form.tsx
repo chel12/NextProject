@@ -35,7 +35,7 @@ export const ChooseGameForm: React.FC<Props> = ({
 	const [type, setType] = React.useState<GameType>(1);
 
 	const [selectedIngredients, { toggle: addIngredient }] = useSet(
-		new Set<Number>([])
+		new Set<number>([])
 	);
 
 	const handleClickAdd = () => {
@@ -69,6 +69,18 @@ export const ChooseGameForm: React.FC<Props> = ({
 			(game) => Number(game.platformType) == Number(item.value)
 		),
 	}));
+	//проверка изданияи типов его, покажет первое доступное
+	React.useEffect(() => {
+		const isAvailablePlatform = availablePlatformTypes?.find(
+			(item) => Number(item.value) == platformType && !item.disabled
+		);
+		const availablePlatform = availablePlatformTypes?.find(
+			(item) => !item.disabled
+		);
+		if (!isAvailablePlatform && availablePlatform) {
+			setPlatformType(Number(availablePlatform.value) as GameEdition);
+		}
+	}, [type]);
 
 	return (
 		<div className={cn(className, 'flex flex-1')}>
