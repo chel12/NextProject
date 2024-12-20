@@ -10,4 +10,6 @@ export { FilterCheckbox } from './filter-checkbox';
 export { GameImage } from './game-image';
 export { ChooseProductForm } from './choose-product-form';
 export { IngredientItem } from './ingredient-item';
+export { CartButton } from './cart-button';
+export { CartDrawer } from './cart-drawer';
 export * from './modals';
