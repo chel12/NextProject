@@ -2,10 +2,7 @@ import { Api } from '@/services/api-client';
 import { create } from 'zustand';
 import { getCartDetails } from '../lib';
 import { CartStateItem } from '../lib/get-cart-details';
-
 //на zustande
-
-
 export interface CartState {
 	loading: boolean;
 	error: boolean;
