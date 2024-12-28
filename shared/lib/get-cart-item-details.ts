@@ -1,10 +1,11 @@
 import { Ingredient } from '@prisma/client';
 import { GameEdition, GameType, mapGameType } from '../constants/game';
+import { CartStateItem } from './get-cart-details';
 
 export const getCartItemDetails = (
+	ingredients: CartStateItem['ingredients'],
 	gameType: GameType,
-	platformType: GameEdition,
-	ingredients: Ingredient[]
+	platformType: GameEdition
 ): string => {
 	const details = [];
 	{

@@ -2,7 +2,6 @@
 import React from 'react';
 import {
 	Sheet,
-	SheetClose,
 	SheetContent,
 	SheetFooter,
 	SheetHeader,
@@ -14,6 +13,8 @@ import { Button } from '../ui';
 import { ArrowRight } from 'lucide-react';
 import { CartDrawerItem } from '.';
 import { getCartItemDetails } from '@/shared/lib';
+import { useCartStore } from '@/shared/store';
+import { GameEdition, GameType } from '@/shared/constants/game';
 
 interface Props {
 	className?: string;
@@ -23,6 +24,12 @@ export const CartDrawer: React.FC<React.PropsWithChildren<Props>> = ({
 	children,
 	className,
 }) => {
+	const fetchCartItems = useCartStore((state) => state.fetchCartItems);
+	const totalAmount = useCartStore((state) => state.totalAmount);
+	const items = useCartStore((state) => state.items);
+	React.useEffect(() => {
+		fetchCartItems();
+	}, []);
 	return (
 		<Sheet>
 			<SheetTrigger asChild>{children}</SheetTrigger>
@@ -30,7 +37,8 @@ export const CartDrawer: React.FC<React.PropsWithChildren<Props>> = ({
 				{/* TOP */}
 				<SheetHeader>
 					<SheetTitle>
-						В корзине <span className="font-bold">3 товара</span>
+						В корзине{' '}
+						<span className="font-bold">{items.length} товара</span>
 					</SheetTitle>
 				</SheetHeader>
 				{/* Mid items */}
@@ -38,100 +46,25 @@ export const CartDrawer: React.FC<React.PropsWithChildren<Props>> = ({
 				<div className="-mx-6 mt-5 overflow-auto  flex-1">
 					{/* 2 div для отступа компонентов*/}
 					<div className="mb-2">
-						<CartDrawerItem
-							details={getCartItemDetails(2, 1, [
-								{ name: 'test' },
-								{ name: 'test2' },
-								{ name: 'test' },
-							])}
-							id={1}
-							imageUrl={
-								'https://gaming-cdn.com/images/products/1620/orig/call-of-duty-4-modern-warfare-pc-mac-game-steam-cover.jpg?v=1701179820'
-							}
-							name="test"
-							price={1000}
-							quantity={2}
-						/>
-					</div>
-					<div className="mb-2">
-						<CartDrawerItem
-							details={getCartItemDetails(2, 1, [
-								{ name: 'test' },
-								{ name: 'test2' },
-								{ name: 'test' },
-							])}
-							id={1}
-							imageUrl={
-								'https://gaming-cdn.com/images/products/1620/orig/call-of-duty-4-modern-warfare-pc-mac-game-steam-cover.jpg?v=1701179820'
-							}
-							name="test"
-							price={1000}
-							quantity={2}
-						/>
-					</div>
-					<div className="mb-2">
-						<CartDrawerItem
-							details={getCartItemDetails(2, 1, [
-								{ name: 'test' },
-								{ name: 'test2' },
-								{ name: 'test' },
-							])}
-							id={1}
-							imageUrl={
-								'https://gaming-cdn.com/images/products/1620/orig/call-of-duty-4-modern-warfare-pc-mac-game-steam-cover.jpg?v=1701179820'
-							}
-							name="test"
-							price={1000}
-							quantity={2}
-						/>
-					</div>
-					<div className="mb-2">
-						<CartDrawerItem
-							details={getCartItemDetails(2, 1, [
-								{ name: 'test' },
-								{ name: 'test2' },
-								{ name: 'test' },
-							])}
-							id={1}
-							imageUrl={
-								'https://gaming-cdn.com/images/products/1620/orig/call-of-duty-4-modern-warfare-pc-mac-game-steam-cover.jpg?v=1701179820'
-							}
-							name="test"
-							price={1000}
-							quantity={2}
-						/>
-					</div>
-					<div className="mb-2">
-						<CartDrawerItem
-							details={getCartItemDetails(2, 1, [
-								{ name: 'test' },
-								{ name: 'test2' },
-								{ name: 'test' },
-							])}
-							id={1}
-							imageUrl={
-								'https://gaming-cdn.com/images/products/1620/orig/call-of-duty-4-modern-warfare-pc-mac-game-steam-cover.jpg?v=1701179820'
-							}
-							name="test"
-							price={1000}
-							quantity={2}
-						/>
-					</div>
-					<div className="mb-2">
-						<CartDrawerItem
-							details={getCartItemDetails(2, 1, [
-								{ name: 'test' },
-								{ name: 'test2' },
-								{ name: 'test' },
-							])}
-							id={1}
-							imageUrl={
-								'https://gaming-cdn.com/images/products/1620/orig/call-of-duty-4-modern-warfare-pc-mac-game-steam-cover.jpg?v=1701179820'
-							}
-							name="test"
-							price={1000}
-							quantity={2}
-						/>
+						{items.map((item) => (
+							<CartDrawerItem
+								key={item.id}
+								id={item.id}
+								imageUrl={item.imageUrl}
+								name={item.name}
+								price={item.price}
+								quantity={item.quantity}
+								details={
+									item.gamePlatform && item.gameType
+										? getCartItemDetails(
+												item.ingredients,
+												item.gameType as GameType,
+												item.gamePlatform as GameEdition
+										  )
+										: ''
+								}
+							/>
+						))}
 					</div>
 				</div>
 				{/* BOTTOM */}
@@ -142,7 +75,9 @@ export const CartDrawer: React.FC<React.PropsWithChildren<Props>> = ({
 								Итого
 								<div className="flex-1 border-b border-dashed border-b-neutral-400 relative -top-1 mx-2" />
 							</span>
-							<span className="font-bold text-lg">0 Р</span>
+							<span className="font-bold text-lg">
+								{totalAmount} Р
+							</span>
 						</div>
 						<Link href="/cart">
 							<Button
