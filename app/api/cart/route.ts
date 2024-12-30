@@ -1,6 +1,9 @@
 import { prisma } from '@/prisma/prisma-client';
 import { NextRequest, NextResponse } from 'next/server';
 import crypto from 'crypto';
+import { findOrCreateCart } from '@/shared/lib/find-or-create-cart';
+import { CreateCartItemValues } from '@/services/dto/cart.dto';
+import { updateCartTotalAmount } from '@/shared/lib';
 
 export async function GET(req: NextRequest) {
 	try {
@@ -55,8 +58,36 @@ export async function POST(req: NextRequest) {
 			token = crypto.randomUUID();
 		}
 
+		//создать или получить корзину
+		const userCart = await findOrCreateCart(token);
+		//что сервер должен получить от клиента
+		const data = (await req.json()) as CreateCartItemValues;
+		//чтобы не добавлять новую, проверяем вариацию и если совпадает увеличить count
+		const findCartItem = await prisma.cartItem.findFirst({
+			where: {
+				cartId: userCart.id,
+				productItemId: data.productItemId,
+				//каждый ингредиент найти и связать его с карт айтемом
+				ingredients: { every: { id: { in: data.ingredients } } },
+			},
+		});
+		//если товар найден + 1
+		if (findCartItem) {
+			await prisma.cartItem.update({
+				where: {
+					id: findCartItem.id,
+				},
+				data: {
+					quantity: findCartItem.quantity + 1,
+				},
+			});
+			const updatedUserCart = await updateCartTotalAmount(token);
+			const resp = NextResponse.json(updatedUserCart);
+			resp.cookies.set('cartToken', token);
+			return resp;
+		}
+		// товар не найден
 		
-
 	} catch (error) {
 		console.log('[CART_POST] Server error', error);
 		return NextResponse.json(

@@ -1,3 +1,5 @@
+import { ingredients } from './../../prisma/constants';
+import { gameType, gameEdition } from './../../shared/constants/game';
 {
 	/*
 Типизация полного овтета корзины в CartDTO
@@ -19,4 +21,10 @@ export type CartItemDTO = CartItem & {
 };
 export interface CartDTO extends Cart {
 	items: CartItemDTO[];
+}
+
+export interface CreateCartItemValues {
+	productItemId: number;
+	ingredients?: number[];
+	quantity: number;
 }

@@ -100,7 +100,7 @@ model CartItem {
 	productItemId Int
 
 
-	quantity Int 
+	quantity Int @default(1)
 
 	ingredients Ingredient[]
 
