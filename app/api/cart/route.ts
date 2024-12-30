@@ -81,13 +81,24 @@ export async function POST(req: NextRequest) {
 					quantity: findCartItem.quantity + 1,
 				},
 			});
-			const updatedUserCart = await updateCartTotalAmount(token);
-			const resp = NextResponse.json(updatedUserCart);
-			resp.cookies.set('cartToken', token);
-			return resp;
 		}
 		// товар не найден
-		
+		await prisma.cartItem.create({
+			data: {
+				cartId: userCart.id,
+				productItemId: data.productItemId,
+				quantity: 1,
+				ingredients: {
+					connect: data.ingredients?.map((id) => ({
+						id,
+					})),
+				},
+			},
+		});
+		const updatedUserCart = await updateCartTotalAmount(token);
+		const resp = NextResponse.json(updatedUserCart);
+		resp.cookies.set('cartToken', token);
+		return resp;
 	} catch (error) {
 		console.log('[CART_POST] Server error', error);
 		return NextResponse.json(
