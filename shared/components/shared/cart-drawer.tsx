@@ -30,6 +30,7 @@ export const CartDrawer: React.FC<React.PropsWithChildren<Props>> = ({
 	const updateItemQuantity = useCartStore(
 		(state) => state.updateItemQuantity
 	);
+	const removeCartItem = useCartStore((state) => state.removeCartItem);
 
 	React.useEffect(() => {
 		fetchCartItems();
@@ -84,6 +85,7 @@ export const CartDrawer: React.FC<React.PropsWithChildren<Props>> = ({
 										type
 									)
 								}
+								onClickRemove={() => removeCartItem(item.id)}
 							/>
 						))}
 					</div>
