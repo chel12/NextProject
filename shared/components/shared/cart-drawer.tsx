@@ -27,9 +27,23 @@ export const CartDrawer: React.FC<React.PropsWithChildren<Props>> = ({
 	const fetchCartItems = useCartStore((state) => state.fetchCartItems);
 	const totalAmount = useCartStore((state) => state.totalAmount);
 	const items = useCartStore((state) => state.items);
+	const updateItemQuantity = useCartStore(
+		(state) => state.updateItemQuantity
+	);
+
 	React.useEffect(() => {
 		fetchCartItems();
 	}, []);
+
+	const onClickCountButton = (
+		id: number,
+		quantity: number,
+		type: 'plus' | 'minus'
+	) => {
+		const newQuantity = type === 'plus' ? quantity + 1 : quantity - 1;
+		updateItemQuantity(id, newQuantity);
+	};
+
 	return (
 		<Sheet>
 			<SheetTrigger asChild>{children}</SheetTrigger>
@@ -62,6 +76,13 @@ export const CartDrawer: React.FC<React.PropsWithChildren<Props>> = ({
 												item.gamePlatform as GameEdition
 										  )
 										: ''
+								}
+								onClickCountButton={(type) =>
+									onClickCountButton(
+										item.id,
+										item.quantity,
+										type
+									)
 								}
 							/>
 						))}
