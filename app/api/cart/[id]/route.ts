@@ -1,5 +1,6 @@
 import { prisma } from '@/prisma/prisma-client';
 import { updateCartTotalAmount } from '@/shared/lib';
+import { error } from 'console';
 import { NextRequest, NextResponse } from 'next/server';
 
 export async function PATCH(
@@ -39,5 +40,42 @@ export async function PATCH(
 			{ status: 500 }
 		);
 	} finally {
+	}
+}
+export async function DELETE(
+	req: NextRequest,
+	{ params }: { params: { id: string } }
+) {
+	try {
+		const id = Number(params.id);
+		const token = req.cookies.get('cartToken')?.value;
+		if (!token) {
+			return NextResponse.json({ error: 'Cart token not found' });
+		}
+		//сначала находим товар
+		const cartItem = await prisma.cartItem.findFirst({
+			where: {
+				id: Number(params.id),
+			},
+		});
+		if (!cartItem) {
+			return NextResponse.json({ error: 'Cart item not found' });
+		}
+		//удаляем найденный товар
+		await prisma.cartItem.delete({
+			where: {
+				id: Number(params.id),
+			},
+		});
+		//обновляем корзину
+		const updatedUserCart = await updateCartTotalAmount(token);
+		return NextResponse.json(updatedUserCart);
+		
+	} catch (error) {
+		console.log('[CART_DELETE] Server error', error);
+		return NextResponse.json(
+			{ message: 'Не удалось удалить корзину' },
+			{ status: 500 }
+		);
 	}
 }
