@@ -1,4 +1,3 @@
-import { addCartItem } from './../../services/cart';
 import { Api } from '@/services/api-client';
 import { create } from 'zustand';
 import { getCartDetails } from '../lib';
@@ -15,12 +14,12 @@ export interface CartState {
 	//запрос на обновление количества товара в корзине
 	updateItemQuantity: (id: number, quantity: number) => Promise<void>;
 	//запрос на добавление товара в корзину
-	addCartItem: (values: any) => Promise<void>;
+	addCartItem: (values: CreateCartItemValues) => Promise<void>;
 	//запрос на удаление товара из корзины
 	removeCartItem: (id: number) => Promise<void>;
 }
 
-export const useCartStore = create<CartState>((set, get) => ({
+export const useCartStore = create<CartState>((set) => ({
 	items: [],
 	error: false,
 	loading: true,

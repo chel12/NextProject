@@ -5,7 +5,6 @@ import { Button } from '../ui';
 import { GroupVariants } from './group-variants';
 import { GameEdition, GameType, gameType } from '@/shared/constants/game';
 import { Ingredient, ProductItem } from '@prisma/client';
-
 import { useGameOptions } from '@/shared/hooks';
 import { getGameDetails } from '@/shared/lib';
 
@@ -15,8 +14,12 @@ interface Props {
 	className?: string;
 	ingredients: Ingredient[];
 	items: ProductItem[];
-	onClickAddCart?: VoidFunction;
+	onSubmit: (itemId: number, ingredients: number[]) => void;
 }
+
+/**
+ * Форма выбора игры
+ */
 
 export const ChooseGameForm: React.FC<Props> = ({
 	className,
@@ -24,7 +27,7 @@ export const ChooseGameForm: React.FC<Props> = ({
 	ingredients,
 	name,
 	items,
-	onClickAddCart,
+	onSubmit,
 }) => {
 	const {
 		platformType,
@@ -34,6 +37,7 @@ export const ChooseGameForm: React.FC<Props> = ({
 		setType,
 		setPlatformType,
 		addIngredient,
+		currentItemId,
 	} = useGameOptions(items);
 
 	const { textDetails, totalPrice } = getGameDetails(
@@ -44,8 +48,9 @@ export const ChooseGameForm: React.FC<Props> = ({
 		selectedIngredients
 	);
 	const handleClickAdd = () => {
-		onClickAddCart?.();
-		console.log({ type, platformType });
+		if (currentItemId) {
+			onSubmit(currentItemId, Array.from(selectedIngredients));
+		}
 	};
 
 	return (

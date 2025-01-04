@@ -13,6 +13,7 @@ interface ReturnProps {
 	selectedIngredients: Set<number>;
 	availableTypes: Variant[];
 	addIngredient: (id: number) => void;
+	currentItemId?: number;
 }
 
 export const useGameOptions = (items: ProductItem[]): ReturnProps => {
@@ -21,7 +22,13 @@ export const useGameOptions = (items: ProductItem[]): ReturnProps => {
 	const [selectedIngredients, { toggle: addIngredient }] = useSet(
 		new Set<number>([])
 	);
+
 	const availableTypes = getAvailableGamePlatforms(type, items);
+	//найти вариацию на основе опций
+	const currentItemId = items.find(
+		(item) => item.gameType === type && item.platformType === platformType
+	)?.id;
+
 	//проверка изданияи типов его, покажет первое доступное
 	React.useEffect(() => {
 		const isAvailablePlatform = availableTypes?.find(
@@ -40,6 +47,7 @@ export const useGameOptions = (items: ProductItem[]): ReturnProps => {
 		type,
 		setPlatformType,
 		setType,
+		currentItemId,
 		selectedIngredients,
 		addIngredient,
 	};
