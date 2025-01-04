@@ -23,7 +23,7 @@ export default async function ProductPage({
 					/>
 					<p className="text-gray-400">инфо о карточке</p>
 					<GroupVariants
-						selectedValue="2"
+						value="2"
 						items={[
 							{
 								name: 'Малое',
