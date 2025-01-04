@@ -8,6 +8,7 @@ import { ChooseGameForm } from '../choose-game-form';
 import { Dialog } from '../../ui';
 import { DialogContent } from '../../ui/dialog';
 import { useCartStore } from '@/shared/store';
+import toast from 'react-hot-toast';
 
 interface Props {
 	product: ProductWithRelations;
@@ -23,17 +24,40 @@ export const ChooseProductModal: React.FC<Props> = ({ product, className }) => {
 	//из стора вытаскиваем
 	const firstItem = product.items[0];
 	const addCartItem = useCartStore((state) => state.addCartItem);
+	const loading = useCartStore((state) => state.loading);
 
-	const onAddProduct = () => {
-		addCartItem({
-			productItemId: firstItem.id,
-		});
-	};
-	const onAddGame = (productItemId: number, ingredients: number[]) => {
-		addCartItem({
-			productItemId,
-			ingredients,
-		});
+	// const onAddProduct = () => {
+	// 	addCartItem({
+	// 		productItemId: firstItem.id,
+	// 	});
+	// };
+	// const onAddGame = (productItemId: number, ingredients: number[]) => {
+	// 	try {
+	// 		addCartItem({
+	// 			productItemId,
+	// 			ingredients,
+	// 		});
+	// 		toast.success('Игра добавлена в корзину');
+	// 		router.back();
+	// 	} catch (err) {
+	// 		toast.error('Не удалось добавить игру в корзину');
+	// 		console.error(err);
+	// 	}
+	// };
+
+	const onSubmit = async (productItemId?: number, ingredients?: number[]) => {
+		try {
+			const itemId = productItemId ?? firstItem.id;
+			await addCartItem({
+				productItemId: itemId,
+				ingredients,
+			});
+			toast.success(product.name + ' добавлен в корзину');
+			router.back();
+		} catch (error) {
+			toast.error(`Не удалось ${product.name} добавить в корзину`);
+			console.error(error);
+		}
 	};
 
 	return (
@@ -48,16 +72,18 @@ export const ChooseProductModal: React.FC<Props> = ({ product, className }) => {
 						<ChooseGameForm
 							imageUrl={product.imageUrl}
 							name={product.name}
+							onSubmit={onSubmit}
 							ingredients={product.ingredients}
 							items={product.items}
-							onSubmit={onAddGame}
+							loading={loading}
 						/>
 					) : (
 						<ChooseProductForm
 							imageUrl={product.imageUrl}
 							name={product.name}
-							onSubmit={onAddProduct}
+							onSubmit={onSubmit}
 							price={firstItem.price}
+							loading={loading}
 						/>
 					)}
 				</DialogContent>

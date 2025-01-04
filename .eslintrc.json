@@ -2,7 +2,6 @@
 	"extends": ["next/core-web-vitals", "next/typescript"],
 	"rules": {
 		"@next/next/no-img-elemeny": "off",
-		//для юза обычного img, а не некста
 		"jsx-a11y/alt-text": "off"
 	}
 }

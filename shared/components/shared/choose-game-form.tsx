@@ -15,6 +15,7 @@ interface Props {
 	ingredients: Ingredient[];
 	items: ProductItem[];
 	onSubmit: (itemId: number, ingredients: number[]) => void;
+	loading?: boolean;
 }
 
 /**
@@ -28,6 +29,7 @@ export const ChooseGameForm: React.FC<Props> = ({
 	name,
 	items,
 	onSubmit,
+	loading,
 }) => {
 	const {
 		platformType,
@@ -90,6 +92,7 @@ export const ChooseGameForm: React.FC<Props> = ({
 					</div>
 				</div>
 				<Button
+					loading={loading}
 					onClick={handleClickAdd}
 					className="h-[55px] px-10 text-base rounded-[18px] w-full mt-10">
 					Добавить в корзину за {totalPrice}Р
