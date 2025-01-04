@@ -1,5 +1,5 @@
 import { axiosInstance } from './instance';
-import { CartDTO } from './dto/cart.dto';
+import { CartDTO, CreateCartItemValues } from './dto/cart.dto';
 
 //запросы на сервер, где контроллеры будут выполнять обработку и возврат
 //запрос получения корзины, Cart = овтет от сервера
@@ -20,4 +20,10 @@ export const updateItemQuantity = async (
 
 export const removeCartItem = async (id: number): Promise<CartDTO> => {
 	return (await axiosInstance.delete<CartDTO>('/cart/' + id)).data;
+};
+
+export const addCartItem = async (
+	values: CreateCartItemValues
+): Promise<CartDTO> => {
+	return (await axiosInstance.post<CartDTO>('/cart/', values)).data;
 };

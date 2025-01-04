@@ -13,6 +13,7 @@ import {
 	ProductItem,
 } from '@prisma/client';
 
+//DTO - интерфейс взаимодействующий с бекендом, либо отправка, либо получение
 export type CartItemDTO = CartItem & {
 	productItem: ProductItem & {
 		product: Product;
