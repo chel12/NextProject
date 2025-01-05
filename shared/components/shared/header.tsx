@@ -3,16 +3,17 @@ import React from 'react';
 import { Container } from './container';
 import Image from 'next/image';
 import { Button } from '../ui';
-import {  SquareUser } from 'lucide-react';
+import { SquareUser } from 'lucide-react';
 import Link from 'next/link';
 import { SearchInput } from './search-input';
 import { CartButton } from '.';
 
 interface Props {
+	hasSearch?: boolean;
 	className?: string;
 }
 
-export const Header: React.FC<Props> = ({ className }) => {
+export const Header: React.FC<Props> = ({ className, hasSearch = true }) => {
 	return (
 		<header className={cn('border border-b', className)}>
 			<Container className="flex items-center justify-between py-8">
@@ -37,9 +38,11 @@ export const Header: React.FC<Props> = ({ className }) => {
 				</Link>
 
 				{/* ПОИСК*/}
-				<div className="mx-10 flex-1">
-					<SearchInput />
-				</div>
+				{hasSearch && (
+					<div className="mx-10 flex-1">
+						<SearchInput />
+					</div>
+				)}
 
 				{/* правая часть*/}
 				<div className="flex items-center gap-3">
