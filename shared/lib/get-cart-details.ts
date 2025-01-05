@@ -12,6 +12,7 @@ export type CartStateItem = {
 	name: string;
 	imageUrl: string;
 	price: number;
+	disabled?: boolean;
 	gamePlatform: number | null;
 	gameType?: number | null;
 	ingredients?: Array<{ name: string; price: number }>;
@@ -31,10 +32,11 @@ export const getCartDetails = (data: CartDTO): ReturnProps => {
 		price: calcCartItemTotalPrice(item),
 		gamePlatform: item.productItem.platformType,
 		gameType: item.productItem.gameType,
+		disabled: false,
 		ingredients: item.ingredients.map((ingredient) => ({
 			name: ingredient.name,
 			price: ingredient.price,
 		})),
-	}));
+	})) as CartStateItem[];
 	return { items, totalAmount: data.totalAmount };
 };
