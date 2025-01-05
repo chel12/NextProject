@@ -63,14 +63,17 @@ export const useFilters = (): ReturnProps => {
 		}));
 	};
 
-	return {
-		platforms,
-		gameTypes,
-		prices,
-		selectedIngredients,
-		setPrices: updatePrice,
-		setGameType: toggleGameType,
-		setPlatform: togglePlatform,
-		setIngredients: toggleIngredients,
-	};
+	return React.useMemo(
+		() => ({
+			platforms,
+			gameTypes,
+			prices,
+			selectedIngredients,
+			setPrices: updatePrice,
+			setGameType: toggleGameType,
+			setPlatform: togglePlatform,
+			setIngredients: toggleIngredients,
+		}),
+		[platforms, gameTypes, prices, selectedIngredients]
+	);
 };
