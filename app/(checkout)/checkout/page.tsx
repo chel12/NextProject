@@ -1,4 +1,5 @@
 import {
+	CheckoutItem,
 	CheckoutItemDetails,
 	Container,
 	Title,
@@ -17,7 +18,30 @@ export default function CheckoutPage() {
 			<div className="flex gap-10">
 				{/* левый блок*/}
 				<div className="flex flex-col gap-10 flex-1 mb-20">
-					<WhiteBlock title="1. Корзина">позже</WhiteBlock>
+					<WhiteBlock title="1. Корзина">
+						<div className="flex flex-col gap-5">
+							<CheckoutItem
+								id={1}
+								imageUrl={
+									'https://gaming-cdn.com/images/products/1620/orig/call-of-duty-4-modern-warfare-pc-mac-game-steam-cover.jpg?v=1701179820'
+								}
+								name={'Call Of Duty'}
+								price={500}
+								quantity={2}
+								details={'Zalupka'}
+							/>
+							<CheckoutItem
+								id={1}
+								imageUrl={
+									'https://gaming-cdn.com/images/products/1620/orig/call-of-duty-4-modern-warfare-pc-mac-game-steam-cover.jpg?v=1701179820'
+								}
+								name={'Call Of Duty'}
+								price={500}
+								quantity={2}
+								details={'Zalupka'}
+							/>
+						</div>
+					</WhiteBlock>
 					<WhiteBlock title="2. Персональные данные">
 						<div className="grid grid-cols-2 gap-5">
 							<Input
