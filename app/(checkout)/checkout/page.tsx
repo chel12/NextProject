@@ -1,3 +1,4 @@
+'use client';
 import {
 	CheckoutItem,
 	CheckoutItemDetails,
@@ -6,11 +7,25 @@ import {
 	WhiteBlock,
 } from '@/shared/components/shared';
 import { Button, Input, Textarea } from '@/shared/components/ui';
+import { GameEdition, GameType } from '@/shared/constants/game';
 import { useCart } from '@/shared/hooks';
+import { getCartItemDetails } from '@/shared/lib';
 import { ArrowRight, Package, Percent, Truck } from 'lucide-react';
 
 export default function CheckoutPage() {
-
+	const { items, removeCartItem, totalAmount, updateItemQuantity } =
+		useCart();
+	const DELIVERY_PRICE = Math.floor(totalAmount * 0.25);
+	const VAT = Math.floor(totalAmount * 0.13);
+	//TODO: вынести эту функцию в useCart
+	const onClickCountButton = (
+		id: number,
+		quantity: number,
+		type: 'plus' | 'minus'
+	) => {
+		const newQuantity = type === 'plus' ? quantity + 1 : quantity - 1;
+		updateItemQuantity(id, newQuantity);
+	};
 	return (
 		<Container className="mt-8">
 			<Title
@@ -22,26 +37,32 @@ export default function CheckoutPage() {
 				<div className="flex flex-col gap-10 flex-1 mb-20">
 					<WhiteBlock title="1. Корзина">
 						<div className="flex flex-col gap-5">
-							<CheckoutItem
-								id={1}
-								imageUrl={
-									'https://gaming-cdn.com/images/products/1620/orig/call-of-duty-4-modern-warfare-pc-mac-game-steam-cover.jpg?v=1701179820'
-								}
-								name={'Call Of Duty'}
-								price={500}
-								quantity={2}
-								details={'Zalupka'}
-							/>
-							<CheckoutItem
-								id={1}
-								imageUrl={
-									'https://gaming-cdn.com/images/products/1620/orig/call-of-duty-4-modern-warfare-pc-mac-game-steam-cover.jpg?v=1701179820'
-								}
-								name={'Call Of Duty'}
-								price={500}
-								quantity={2}
-								details={'Zalupka'}
-							/>
+							{items.map((item) => (
+								<CheckoutItem
+									key={item.id}
+									id={item.id}
+									disabled={item.disabled}
+									imageUrl={item.imageUrl}
+									name={item.name}
+									price={item.price}
+									quantity={item.quantity}
+									details={getCartItemDetails(
+										item.ingredients,
+										item.gameType as GameType,
+										item.gamePlatform as GameEdition
+									)}
+									onClickCountButton={(type) =>
+										onClickCountButton(
+											item.id,
+											item.quantity,
+											type
+										)
+									}
+									onClickRemove={() =>
+										removeCartItem(item.id)
+									}
+								/>
+							))}
 						</div>
 					</WhiteBlock>
 					<WhiteBlock title="2. Персональные данные">
@@ -84,7 +105,7 @@ export default function CheckoutPage() {
 						<div className="flex flex-col gap-1">
 							<span className="text-xl">Итого: </span>
 							<span className="text-[34px] font-extrabold">
-								199 Р.
+								{totalAmount + VAT + DELIVERY_PRICE} Р.
 							</span>
 						</div>
 						<CheckoutItemDetails
@@ -94,7 +115,7 @@ export default function CheckoutPage() {
 									Стоимость товаров
 								</div>
 							}
-							value="199"
+							value={totalAmount}
 						/>
 						<CheckoutItemDetails
 							title={
@@ -103,7 +124,7 @@ export default function CheckoutPage() {
 									Налоги
 								</div>
 							}
-							value="1"
+							value={VAT}
 						/>
 						<CheckoutItemDetails
 							title={
@@ -112,7 +133,7 @@ export default function CheckoutPage() {
 									Доставка
 								</div>
 							}
-							value="10"
+							value={DELIVERY_PRICE}
 						/>
 						<Button
 							type="submit"

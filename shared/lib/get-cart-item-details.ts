@@ -4,8 +4,8 @@ import { CartStateItem } from './get-cart-details';
 
 export const getCartItemDetails = (
 	ingredients: CartStateItem['ingredients'],
-	gameType: GameType,
-	platformType: GameEdition
+	gameType?: GameType,
+	platformType?: GameEdition
 ): string => {
 	const details = [];
 	{

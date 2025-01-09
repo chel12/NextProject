@@ -19,12 +19,10 @@ import { GameEdition, GameType } from '@/shared/constants/game';
 import { cn } from '@/shared/lib/utils';
 import { useCart } from '@/shared/hooks';
 
-export const CartDrawer: React.FC<React.PropsWithChildren> = ({
-	children,
-}) => {
-	
+export const CartDrawer: React.FC<React.PropsWithChildren> = ({ children }) => {
 	const { items, removeCartItem, totalAmount, updateItemQuantity } =
 		useCart();
+	const [redirect, setRedirect] = React.useState(false);
 	const onClickCountButton = (
 		id: number,
 		quantity: number,
@@ -135,8 +133,10 @@ export const CartDrawer: React.FC<React.PropsWithChildren> = ({
 											{totalAmount} Р
 										</span>
 									</div>
-									<Link href="/cart">
+									<Link href="/checkout">
 										<Button
+											onClick={() => setRedirect(true)}
+											loading={redirect}
 											className="w-full h-12 text-base"
 											type="submit">
 											Оформить заказ
