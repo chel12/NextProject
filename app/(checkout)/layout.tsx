@@ -1,4 +1,4 @@
-import { Header } from '@/shared/components/shared';
+import { Container, Header } from '@/shared/components/shared';
 
 export const metadata = {
 	title: 'Next Game | Корзина',
@@ -12,8 +12,14 @@ export default function CheckoutLayout({
 }) {
 	return (
 		<main className="min-h-screen bg-[#f5f5ff]">
-			<Header className="border-gray-200" hasSearch={false} />
-			{children}
+			<Container>
+				<Header
+					className="border-b-gray-200"
+					hasSearch={false}
+					hasCart={false}
+				/>
+				{children}
+			</Container>
 		</main>
 	);
 }
