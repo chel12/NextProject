@@ -15,4 +15,5 @@ export { CartDrawer } from './cart-drawer';
 export { CartDrawerItem } from './cart-drawer-item';
 export { ProductForm } from './product-form';
 export { WhiteBlock } from './white-block';
+export { CheckoutItemDetails } from './checkout-item-details';
 export * from './modals';
