@@ -15,29 +15,16 @@ import { Button } from '../ui';
 import { ArrowLeft, ArrowRight } from 'lucide-react';
 import { CartDrawerItem, Title } from '.';
 import { getCartItemDetails } from '@/shared/lib';
-import { useCartStore } from '@/shared/store';
 import { GameEdition, GameType } from '@/shared/constants/game';
 import { cn } from '@/shared/lib/utils';
+import { useCart } from '@/shared/hooks';
 
-interface Props {
-	className?: string;
-}
-
-export const CartDrawer: React.FC<React.PropsWithChildren<Props>> = ({
+export const CartDrawer: React.FC<React.PropsWithChildren> = ({
 	children,
 }) => {
-	const fetchCartItems = useCartStore((state) => state.fetchCartItems);
-	const totalAmount = useCartStore((state) => state.totalAmount);
-	const items = useCartStore((state) => state.items);
-	const updateItemQuantity = useCartStore(
-		(state) => state.updateItemQuantity
-	);
-	const removeCartItem = useCartStore((state) => state.removeCartItem);
-
-	React.useEffect(() => {
-		fetchCartItems();
-	}, []);
-
+	
+	const { items, removeCartItem, totalAmount, updateItemQuantity } =
+		useCart();
 	const onClickCountButton = (
 		id: number,
 		quantity: number,

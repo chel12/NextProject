@@ -6,9 +6,11 @@ import {
 	WhiteBlock,
 } from '@/shared/components/shared';
 import { Button, Input, Textarea } from '@/shared/components/ui';
+import { useCart } from '@/shared/hooks';
 import { ArrowRight, Package, Percent, Truck } from 'lucide-react';
 
 export default function CheckoutPage() {
+
 	return (
 		<Container className="mt-8">
 			<Title
