@@ -1,26 +1,25 @@
-import { Input } from '../../ui';
 import { FormInput } from '../form-components';
 import { WhiteBlock } from '../white-block';
 
 interface Props {
 	className?: string;
 }
-export const CheckoutPersonalForm: React.FC<Props> = () => {
+export const CheckoutPersonalForm: React.FC<Props> = ({ className }) => {
 	return (
-		<WhiteBlock title="2. Персональные данные">
+		<WhiteBlock title="2. Персональные данные" className={className}>
 			<div className="grid grid-cols-2 gap-5">
-				<Input
+				<FormInput
 					name="firstName"
 					className="text-base"
-					placeholder="Имя"></Input>
-				<Input
+					placeholder="Имя"></FormInput>
+				<FormInput
 					name="lastName"
 					className="text-base"
-					placeholder="Фамилия"></Input>
-				<Input
+					placeholder="Фамилия"></FormInput>
+				<FormInput
 					name="email"
 					className="text-base"
-					placeholder="E-Mail"></Input>
+					placeholder="E-Mail"></FormInput>
 				<FormInput
 					name="phone"
 					className="text-base"
