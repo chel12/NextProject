@@ -11,7 +11,7 @@ interface Props extends React.InputHTMLAttributes<HTMLInputElement> {
 }
 
 export const FormInput: React.FC<Props> = ({
-	name,
+	
 	className,
 	label,
 	required,
