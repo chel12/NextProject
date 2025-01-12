@@ -1,11 +1,15 @@
 'use client';
+import { useForm, SubmitHandler } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
 import {
 	CheckoutItem,
 	CheckoutSidebar,
 	Container,
+	FormInput,
 	Title,
 	WhiteBlock,
 } from '@/shared/components/shared';
+
 import { Input, Textarea } from '@/shared/components/ui';
 import { GameEdition, GameType } from '@/shared/constants/game';
 import { useCart } from '@/shared/hooks';
@@ -15,6 +19,17 @@ export default function CheckoutPage() {
 	const { items, removeCartItem, totalAmount, updateItemQuantity } =
 		useCart();
 
+	const form = useForm({
+		resolver: zodResolver(),
+		defaultValues: {
+			email: '',
+			firstName: '',
+			lastName: '',
+			phone: '',
+			address: '',
+			comment: '',
+		},
+	});
 	//TODO: вынести эту функцию в useCart
 	const onClickCountButton = (
 		id: number,
@@ -77,10 +92,10 @@ export default function CheckoutPage() {
 								name="email"
 								className="text-base"
 								placeholder="E-Mail"></Input>
-							<Input
+							<FormInput
 								name="phone"
 								className="text-base"
-								placeholder="Телефон"></Input>
+								placeholder="Телефон"></FormInput>
 						</div>
 					</WhiteBlock>
 					<WhiteBlock title="3. Адрес доставки">
