@@ -1,4 +1,4 @@
-import { FormInput } from '../form-components';
+import { FormInput } from '../form';
 import { WhiteBlock } from '../white-block';
 
 interface Props {
