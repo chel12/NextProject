@@ -14,9 +14,10 @@ import {
 	checkoutFormSchema,
 	CheckoutFormValues,
 } from '@/shared/constants/checkout-form-schema';
+import { cn } from '@/shared/lib/utils';
 
 export default function CheckoutPage() {
-	const { items, removeCartItem, totalAmount, updateItemQuantity } =
+	const { items, removeCartItem, totalAmount, updateItemQuantity, loading } =
 		useCart();
 
 	const form = useForm<CheckoutFormValues>({
@@ -58,13 +59,25 @@ export default function CheckoutPage() {
 								onClickCountButton={onClickCountButton}
 								removeCartItem={removeCartItem}
 								items={items}
+								loading={loading}
 							/>
-							<CheckoutPersonalForm />
-							<CheckoutAdressForm />
+							<CheckoutPersonalForm
+								className={cn({
+									'opacity-40 pointer-events-none': loading,
+								})}
+							/>
+							<CheckoutAdressForm
+								className={cn({
+									'opacity-40 pointer-events-none': loading,
+								})}
+							/>
 						</div>
 						{/* правый блок*/}
 						<div className="w-[450px]">
-							<CheckoutSidebar totalAmount={totalAmount} />
+							<CheckoutSidebar
+								totalAmount={totalAmount}
+								loading={loading}
+							/>
 						</div>
 					</div>
 				</form>

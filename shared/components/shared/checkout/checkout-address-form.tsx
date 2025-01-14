@@ -7,15 +7,11 @@ import { ErrorText } from '../error-text';
 interface Props {
 	className?: string;
 }
-export const CheckoutAdressForm: React.FC<Props> = () => {
+export const CheckoutAdressForm: React.FC<Props> = ({ className }) => {
 	const { control } = useFormContext();
 	return (
-		<WhiteBlock title="3. Адрес доставки">
+		<WhiteBlock title="3. Адрес доставки" className={className}>
 			<div className="flex flex-col gap-5">
-				{/* <Input
-					name="firstName"
-					className="text-base"
-					placeholder="Адрес доставки"></Input> */}
 				{/* контроллер чтобы связать данные из АдресИнпута с RHF */}
 				<Controller
 					control={control}

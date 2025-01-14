@@ -1,17 +1,18 @@
 import React from 'react';
 import { CheckoutItemDetails, WhiteBlock } from '.';
 import { ArrowRight, Package, Percent, Truck } from 'lucide-react';
-import { Button } from '../ui';
+import { Button, Skeleton } from '../ui';
 import { cn } from '@/shared/lib/utils';
 
 interface Props {
+	loading?: boolean;
 	totalAmount: number;
 	className?: string;
 }
 
 export const CheckoutSidebar: React.FC<Props> = ({
 	totalAmount,
-
+	loading,
 	className,
 }) => {
 	const DELIVERY_PRICE = Math.floor(totalAmount * 0.25);
@@ -20,9 +21,13 @@ export const CheckoutSidebar: React.FC<Props> = ({
 		<WhiteBlock className={cn('p-6 sticky top-4', className)}>
 			<div className="flex flex-col gap-1">
 				<span className="text-xl">Итого: </span>
-				<span className="text-[34px] font-extrabold">
-					{totalAmount + VAT + DELIVERY_PRICE} Р.
-				</span>
+				{loading ? (
+					<Skeleton className=" h-11 w-48" />
+				) : (
+					<span className=" h-11 text-[34px] font-extrabold">
+						{totalAmount + VAT + DELIVERY_PRICE} Р.
+					</span>
+				)}
 			</div>
 			<CheckoutItemDetails
 				title={
@@ -31,7 +36,13 @@ export const CheckoutSidebar: React.FC<Props> = ({
 						Стоимость товаров
 					</div>
 				}
-				value={totalAmount}
+				value={
+					loading ? (
+						<Skeleton className="h-6 w-14 rounded-[6px]" />
+					) : (
+						`${totalAmount} Руб.`
+					)
+				}
 			/>
 			<CheckoutItemDetails
 				title={
@@ -40,7 +51,13 @@ export const CheckoutSidebar: React.FC<Props> = ({
 						Налоги
 					</div>
 				}
-				value={VAT}
+				value={
+					loading ? (
+						<Skeleton className="h-6 w-14 rounded-[6px]" />
+					) : (
+						`${VAT} Руб.`
+					)
+				}
 			/>
 			<CheckoutItemDetails
 				title={
@@ -49,7 +66,13 @@ export const CheckoutSidebar: React.FC<Props> = ({
 						Доставка
 					</div>
 				}
-				value={DELIVERY_PRICE}
+				value={
+					loading ? (
+						<Skeleton className="h-6 w-14 rounded-[6px]" />
+					) : (
+						`${DELIVERY_PRICE} Руб.`
+					)
+				}
 			/>
 			<Button
 				type="submit"

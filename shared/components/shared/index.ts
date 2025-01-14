@@ -24,5 +24,4 @@ export { ErrorText } from './error-text';
 export { ClearButton } from './clear-button';
 export * from './checkout';
 export * from './form';
-export { CheckoutSidebar } from './checkout-sidebar';
 export * from './modals';
