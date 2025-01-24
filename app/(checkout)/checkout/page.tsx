@@ -15,6 +15,7 @@ import {
 	CheckoutFormValues,
 } from '@/shared/constants/checkout-form-schema';
 import { cn } from '@/shared/lib/utils';
+import { createOrder } from '@/app/actions';
 
 export default function CheckoutPage() {
 	const { items, removeCartItem, totalAmount, updateItemQuantity, loading } =
@@ -33,6 +34,7 @@ export default function CheckoutPage() {
 	});
 	const onSubmit = (data: CheckoutFormValues) => {
 		console.log(data);
+		createOrder(data);
 	};
 
 	//TODO: вынести эту функцию в useCart
