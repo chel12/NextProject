@@ -1,7 +1,9 @@
 'use server';
 
 import { prisma } from '@/prisma/prisma-client';
+import { PayOrderTemplate } from '@/shared/components';
 import { CheckoutFormValues } from '@/shared/constants';
+import { sendEmail } from '@/shared/lib';
 import { OrderStatus } from '@prisma/client';
 import { cookies } from 'next/headers';
 
@@ -71,7 +73,20 @@ export async function createOrder(data: CheckoutFormValues) {
 			},
 		});
 		//TODO:Сделать создание ссылки оплату
-		return 'link';
-	} catch (error) {}
-	
+
+		//*RESEND БИБЛИОТЕКА для теста отправки писем
+
+		await sendEmail(
+			data.email,
+			'Next game / Оплатите заказ #' + order.id,
+			PayOrderTemplate({
+				orderId: order.id,
+				totalAmount: order.totalAmount,
+				paymentUrl: 'https://resend.dev',
+			})
+		);
+		/*'link re_bc7BwH5Z_5EkzzghcycuxmNJLd2bfYyia'*/
+	} catch (error) {
+		console.log('[CreateOrder] Server error', error);
+	}
 }
