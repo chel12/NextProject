@@ -1,8 +1,9 @@
 //запрос для юкассы, статус заказа
-
 import { PaymentCallbackData } from '@/@types/yookassa';
 import { prisma } from '@/prisma/prisma-client';
 import { CartItemDTO } from '@/services/dto/cart.dto';
+import { OrderSuccessTemplate } from '@/shared/components/shared/email-templates/order-success';
+import { sendEmail } from '@/shared/lib';
 import { OrderStatus } from '@prisma/client';
 import { NextRequest, NextResponse } from 'next/server';
 
@@ -24,19 +25,32 @@ export async function POST(req: NextRequest) {
 				{ status: 404 }
 			);
 		}
+
 		//обновляем статус оплаты заказа в БД
+
+		const isSucceeded = body.object.status === 'succeeded';
 		await prisma.order.update({
 			where: {
 				id: order.id,
 			},
 			data: {
-				status: OrderStatus.SUCCEEDED,
+				status: isSucceeded
+					? OrderStatus.SUCCEEDED
+					: OrderStatus.CANCELLED,
 			},
 		});
 
 		//вытаскиваем items
-
 		const items = order?.items as unknown as CartItemDTO[];
+		if (isSucceeded) {
+			await sendEmail(
+				order.email,
+				'Next Game / Заказ успешно оплачен 🥰',
+				OrderSuccessTemplate({ orderId: order.id, items })
+			);
+		} else {
+			//письмо об отмене заказа
+		}
 	} catch (error) {
 		console.log('[Checkout Callback] Error:', error);
 		return NextResponse.json({ error: 'Server error' }, { status: 500 });
