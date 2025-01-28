@@ -9,7 +9,7 @@ interface Props {
 export const OrderSuccessTemplate: React.FC<Props> = ({ orderId, items }) => (
 	<div>
 		<h1>Спасибо за покупку 🥰</h1>
-		<p>Ваш заказ #${orderId} оплачен. Список товаров:</p>
+		<p>Ваш заказ # {orderId} оплачен. Список товаров:</p>
 		<hr />
 		<ul>
 			{items.map((item) => (

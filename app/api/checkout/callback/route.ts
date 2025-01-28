@@ -41,7 +41,9 @@ export async function POST(req: NextRequest) {
 		});
 
 		//вытаскиваем items
-		const items = order?.items as unknown as CartItemDTO[];
+		const items = JSON.parse(
+			order?.items as unknown as string
+		) as CartItemDTO[];
 		if (isSucceeded) {
 			await sendEmail(
 				order.email,
