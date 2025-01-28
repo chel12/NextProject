@@ -3,7 +3,7 @@
 import { prisma } from '@/prisma/prisma-client';
 import { PayOrderTemplate } from '@/shared/components';
 import { CheckoutFormValues } from '@/shared/constants';
-import { sendEmail } from '@/shared/lib';
+import { createPayments, sendEmail } from '@/shared/lib';
 import { OrderStatus } from '@prisma/client';
 import { cookies } from 'next/headers';
 
@@ -66,26 +66,52 @@ export async function createOrder(data: CheckoutFormValues) {
 				totalAmount: 0,
 			},
 		});
+
 		//удалить товары из корзины
 		await prisma.cartItem.deleteMany({
 			where: {
 				cartId: userCart.id,
 			},
 		});
-		//TODO:Сделать создание ссылки оплату
+
+		/* создание платежа на юкассе*/
+		const paymentData = await createPayments({
+			amount: order.totalAmount,
+			orderId: order.id,
+			description: 'Оплата заказа #' + order.id,
+		});
+
+		/* ошибка если нет платежа*/
+		if (!paymentData) {
+			throw new Error('Payment data not found');
+		}
+
+		/* обновляем заказ*/
+		await prisma.order.update({
+			where: {
+				id: order.id,
+			},
+			//paymentId id юкассы оплат, индификатор платежа
+			data: {
+				paymendId: paymentData.id,
+			},
+		});
 
 		//*RESEND БИБЛИОТЕКА для теста отправки писем
-
+		/* ссылка перенаправления на оплату*/
+		const paymentUrl = paymentData.confirmation.return_url;
+		/* отправка письма*/
 		await sendEmail(
 			data.email,
 			'Next game / Оплатите заказ #' + order.id,
 			PayOrderTemplate({
 				orderId: order.id,
 				totalAmount: order.totalAmount,
-				paymentUrl: 'https://resend.dev',
+				paymentUrl,
 			})
 		);
-		/*'link re_bc7BwH5Z_5EkzzghcycuxmNJLd2bfYyia'*/
+
+		return paymentUrl;
 	} catch (error) {
 		console.log('[CreateOrder] Server error', error);
 	}
