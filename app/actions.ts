@@ -99,8 +99,8 @@ export async function createOrder(data: CheckoutFormValues) {
 
 		//*RESEND БИБЛИОТЕКА для теста отправки писем
 		/* ссылка перенаправления на оплату*/
-		const paymentUrl = paymentData.confirmation.return_url;
-		/* отправка письма*/
+		const paymentUrl = paymentData.confirmation.confirmation_url;
+		/* отправка */
 		await sendEmail(
 			data.email,
 			'Next game / Оплатите заказ #' + order.id,

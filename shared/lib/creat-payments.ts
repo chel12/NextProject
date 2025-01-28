@@ -32,7 +32,7 @@ export async function createPayments(details: Props) {
 		{
 			//для юкассы ключ апи кабинета
 			auth: {
-				username: '1022626',
+				username: process.env.YOOKASSA_STORE_ID as string,
 				password: process.env.YOOKASSA_API_KEY as string,
 			},
 			//заголовок для уникальности имени заказа

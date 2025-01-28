@@ -23,7 +23,7 @@ export interface Recipient {
 
 export interface Confirmation {
 	type: string;
-	return_url: string;
+	confirmation_url: string;
 }
 export interface Metadata {
 	order_id: string;
