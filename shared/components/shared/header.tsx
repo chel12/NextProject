@@ -7,7 +7,7 @@ import { Button } from '../ui';
 import { SquareUser } from 'lucide-react';
 import Link from 'next/link';
 import { SearchInput } from './search-input';
-import { CartButton } from '.';
+import { CartButton, ProfileButton } from '.';
 import { useSearchParams } from 'next/navigation';
 import toast from 'react-hot-toast';
 import { useSession, signIn } from 'next-auth/react';
@@ -68,7 +68,8 @@ export const Header: React.FC<Props> = ({
 
 				{/* правая часть*/}
 				<div className="flex items-center gap-3">
-					<Button
+					<ProfileButton />
+					{/* <Button
 						onClick={() =>
 							signIn('github', {
 								callbackUrl: '/',
@@ -79,7 +80,7 @@ export const Header: React.FC<Props> = ({
 						className="flex items-center gap-1">
 						<SquareUser size={16} />
 						Войти
-					</Button>
+					</Button> */}
 
 					{hasCart && <CartButton />}
 				</div>
