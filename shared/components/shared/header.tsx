@@ -8,9 +8,9 @@ import { SquareUser } from 'lucide-react';
 import Link from 'next/link';
 import { SearchInput } from './search-input';
 import { CartButton } from '.';
-import { useSearchParam } from 'react-use';
 import { useSearchParams } from 'next/navigation';
 import toast from 'react-hot-toast';
+import { useSession, signIn } from 'next-auth/react';
 
 interface Props {
 	hasSearch?: boolean;
@@ -23,6 +23,7 @@ export const Header: React.FC<Props> = ({
 	hasSearch = true,
 	hasCart = true,
 }) => {
+	const { data: session } = useSession();
 	const searchParams = useSearchParams();
 
 	React.useEffect(() => {
@@ -68,6 +69,12 @@ export const Header: React.FC<Props> = ({
 				{/* правая часть*/}
 				<div className="flex items-center gap-3">
 					<Button
+						onClick={() =>
+							signIn('github', {
+								callbackUrl: '/',
+								redirect: true,
+							})
+						}
 						variant="outline"
 						className="flex items-center gap-1">
 						<SquareUser size={16} />
