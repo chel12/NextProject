@@ -3,11 +3,9 @@ import { cn } from '@/shared/lib/utils';
 import React from 'react';
 import { Container } from './container';
 import Image from 'next/image';
-import { Button } from '../ui';
-import { SquareUser } from 'lucide-react';
 import Link from 'next/link';
 import { SearchInput } from './search-input';
-import { CartButton, ProfileButton } from '.';
+import { AuthModal, CartButton, ProfileButton } from '.';
 import { useSearchParams } from 'next/navigation';
 import toast from 'react-hot-toast';
 import { useSession, signIn } from 'next-auth/react';
@@ -23,7 +21,7 @@ export const Header: React.FC<Props> = ({
 	hasSearch = true,
 	hasCart = true,
 }) => {
-	const { data: session } = useSession();
+	const [openAuthModal, setOpenAuthModal] = React.useState(false);
 	const searchParams = useSearchParams();
 
 	React.useEffect(() => {
@@ -68,20 +66,13 @@ export const Header: React.FC<Props> = ({
 
 				{/* правая часть*/}
 				<div className="flex items-center gap-3">
-					<ProfileButton />
-					{/* <Button
-						onClick={() =>
-							signIn('github', {
-								callbackUrl: '/',
-								redirect: true,
-							})
-						}
-						variant="outline"
-						className="flex items-center gap-1">
-						<SquareUser size={16} />
-						Войти
-					</Button> */}
-
+					<AuthModal
+						open={openAuthModal}
+						onCLose={() => setOpenAuthModal(false)}
+					/>
+					<ProfileButton
+						onClickSignIn={() => setOpenAuthModal(true)}
+					/>
 					{hasCart && <CartButton />}
 				</div>
 			</Container>
