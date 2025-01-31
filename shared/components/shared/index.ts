@@ -24,6 +24,7 @@ export { ErrorText } from './error-text';
 export { ClearButton } from './clear-button';
 export { ProfileButton } from './profile-button';
 export { InfoBlock } from './info-block';
+export { ProfileForm } from './profile-form';
 export * from './checkout';
 export * from './form';
 export * from './modals';
