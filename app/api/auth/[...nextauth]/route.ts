@@ -2,7 +2,7 @@ import NextAuth from 'next-auth';
 import GitHubProvider from 'next-auth/providers/github';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import { prisma } from '@/prisma/prisma-client';
-import { compare } from 'bcrypt';
+import { compare, hashSync } from 'bcrypt';
 import { UserRole } from '@prisma/client';
 
 export const authOptions = {
@@ -64,6 +64,57 @@ export const authOptions = {
 		strategy: 'jwt',
 	},
 	callbacks: {
+		async signIn({ user, account }) {
+			try {
+				if (account?.provider === 'credentials') {
+					return true;
+				}
+				if (!user.email) {
+					return false;
+				}
+				const findUser = await prisma.user.findFirst({
+					where: {
+						OR: [
+							{
+								provider: account?.provider,
+								providerId: account?.providerAccountId,
+							},
+							{ email: user.email },
+						],
+					},
+				});
+
+				//если пользователь уже есть в БД обнови таблицы провайдера
+				if (findUser) {
+					await prisma.user.update({
+						where: {
+							id: findUser.id,
+						},
+						data: {
+							provider: account?.provider,
+							providerId: account?.providerAccountId,
+						},
+					});
+					return true;
+				}
+
+				//если нет - создаём
+				await prisma.user.create({
+					data: {
+						email: user.email,
+						fullName: user.name || 'User #' + user.id,
+						password: hashSync(user.id.toString(), 10),
+						verified: new Date(),
+						provider: account?.provider,
+						providerId: account?.providerAccountId,
+					},
+				});
+				return true;
+			} catch (error) {
+				console.error('Error [SIGNIN]', error);
+				return false;
+			}
+		},
 		async jwt({ token }) {
 			const findUser = await prisma.user.findFirst({
 				where: {
