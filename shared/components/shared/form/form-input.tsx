@@ -1,3 +1,4 @@
+'use client';
 import { useFormContext } from 'react-hook-form';
 import { Input } from '../../ui';
 import { ClearButton } from '../clear-button';
@@ -24,7 +25,7 @@ export const FormInput: React.FC<Props> = ({
 		watch,
 		setValue,
 	} = useFormContext();
-	
+
 	const value = watch(name);
 	const errorText = errors[name]?.message as string;
 	const onClickClear = () => {

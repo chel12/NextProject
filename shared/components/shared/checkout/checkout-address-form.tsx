@@ -1,3 +1,4 @@
+'use client';
 import { Controller, useFormContext } from 'react-hook-form';
 import { AdressInput } from '../address-input';
 import { FormTextarea } from '../form';

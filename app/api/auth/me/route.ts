@@ -2,6 +2,9 @@ import { prisma } from '@/prisma/prisma-client';
 import { getUserSession } from '@/shared/lib/get-user-session';
 import { NextResponse } from 'next/server';
 
+//фикс ошибки next js асинх конеткст
+export const dynamic = 'force-dynamic';
+
 //возвращет профиль
 export async function GET() {
 	try {
