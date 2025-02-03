@@ -1,7 +1,7 @@
 'use server';
-
+//!серверные экшены
 import { prisma } from '@/prisma/prisma-client';
-import { PayOrderTemplate } from '@/shared/components';
+import { PayOrderTemplate, VerificationUser } from '@/shared/components';
 import { CheckoutFormValues } from '@/shared/constants';
 import { createPayments, sendEmail } from '@/shared/lib';
 import { getUserSession } from '@/shared/lib/get-user-session';
@@ -9,7 +9,7 @@ import { OrderStatus, Prisma } from '@prisma/client';
 import { hashSync } from 'bcrypt';
 import { cookies } from 'next/headers';
 
-//серверный экшен для заказа
+//для заказа
 export async function createOrder(data: CheckoutFormValues) {
 	try {
 		const cookieStore = cookies();
@@ -120,6 +120,7 @@ export async function createOrder(data: CheckoutFormValues) {
 	}
 }
 
+//для обновления профиля
 export async function updateUserInfo(body: Prisma.UserUpdateInput) {
 	try {
 		//проверка авторизации
@@ -149,6 +150,52 @@ export async function updateUserInfo(body: Prisma.UserUpdateInput) {
 		});
 	} catch (error) {
 		console.log('Error [UPDATE_USER]', error);
+		throw error;
+	}
+}
+
+//для регистрации
+export async function registerUser(body: Prisma.UserCreateInput) {
+	try {
+		const user = await prisma.user.findFirst({
+			where: {
+				email: body.email,
+			},
+		});
+		//проверки что уже есть
+		if (user) {
+			if (!user.verified) {
+				throw new Error('Почта не подтверждена');
+			}
+			throw new Error('Пользователь с таким email уже зарегистрирован');
+		}
+		//создание пользователя
+		const createdUser = await prisma.user.create({
+			data: {
+				fullName: body.fullName,
+				email: body.email,
+				password: hashSync(body.password, 10),
+			},
+		});
+
+		//генерация кода для подтверждения почты
+		const code = Math.floor(100000 + Math.random() * 900000).toString();
+		await prisma.verificationCode.create({
+			data: {
+				code,
+				userId: createdUser.id,
+			},
+		});
+		//отправка письма
+		await sendEmail(
+			createdUser.email,
+			'Next Game | Подтверждение регистрации',
+			VerificationUser({
+				code,
+			})
+		);
+	} catch (error) {
+		console.log('Ошибка регистрации', error);
 		throw error;
 	}
 }
