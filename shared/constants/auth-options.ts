@@ -1,4 +1,5 @@
 import { AuthOptions } from 'next-auth';
+import GoogleProvider from 'next-auth/providers/google';
 import GitHubProvider from 'next-auth/providers/github';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import { prisma } from '@/prisma/prisma-client';
@@ -19,6 +20,10 @@ export const authOptions: AuthOptions = {
 					role: 'USER' as UserRole,
 				};
 			},
+		}),
+		GoogleProvider({
+			clientId: process.env.GOOGLE_CLIENT_ID || '',
+			clientSecret: process.env.GOOGLE_CLIENT_SECRET || '',
 		}),
 		CredentialsProvider({
 			name: 'Credentials',
