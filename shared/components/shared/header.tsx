@@ -6,9 +6,10 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { SearchInput } from './search-input';
 import { AuthModal, CartButton, ProfileButton } from '.';
-import { useSearchParams } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import toast from 'react-hot-toast';
 import { useSession, signIn } from 'next-auth/react';
+import { set } from 'react-hook-form';
 
 interface Props {
 	hasSearch?: boolean;
@@ -21,16 +22,26 @@ export const Header: React.FC<Props> = ({
 	hasSearch = true,
 	hasCart = true,
 }) => {
+	const router = useRouter();
 	const [openAuthModal, setOpenAuthModal] = React.useState(false);
 	const searchParams = useSearchParams();
 
 	React.useEffect(() => {
+		let toastMessage = '';
 		if (searchParams.has('paid')) {
+			toastMessage =
+				'Покупка прошла успешно, Информация отправлена на почту.';
+		}
+		if (searchParams.has('verified')) {
+			toastMessage = ' Почта успешно подтверждена !';
+		}
+		if (toastMessage) {
+			router.replace('/');
 			setTimeout(() => {
-				toast.success(
-					'Покупка прошла успешно, Информация отправлена на почту.'
-				);
-			}, 500);
+				toast.success(toastMessage, {
+					duration: 5000,
+				});
+			}, 1000);
 		}
 	}, []);
 
