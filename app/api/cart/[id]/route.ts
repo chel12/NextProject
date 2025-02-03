@@ -4,7 +4,7 @@ import { NextRequest, NextResponse } from 'next/server';
 
 export async function PATCH(
 	req: NextRequest,
-	{ params }: { params: { id: string } }
+	{ params }: { params: { id: number } }
 ) {
 	try {
 		const id = Number(params.id);
@@ -69,7 +69,6 @@ export async function DELETE(
 		//обновляем корзину
 		const updatedUserCart = await updateCartTotalAmount(token);
 		return NextResponse.json(updatedUserCart);
-		
 	} catch (error) {
 		console.log('[CART_DELETE] Server error', error);
 		return NextResponse.json(
