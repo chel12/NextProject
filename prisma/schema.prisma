@@ -14,7 +14,7 @@ model User {
 	email String @unique
 	password String
 	role UserRole @default(USER)
-	verified DateTime 
+	verified DateTime?
 	//какая соц сеть привязана к пользователю
 	provider String?
 	providerId String?

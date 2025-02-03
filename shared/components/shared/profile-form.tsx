@@ -1,3 +1,4 @@
+'use client';
 import { zodResolver } from '@hookform/resolvers/zod';
 import React from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
@@ -10,6 +11,7 @@ import toast from 'react-hot-toast';
 import { signOut } from 'next-auth/react';
 import { Container, FormInput, Title } from '.';
 import { Button } from '..';
+import { updateUserInfo } from '@/app/actions';
 
 interface Props {
 	data: User;
@@ -51,7 +53,11 @@ export const ProfileForm: React.FC<Props> = ({ data }) => {
 
 	return (
 		<Container className="my-10">
-			<Title text="Личные данные" size="md" className="font-bold" />
+			<Title
+				text={`Личные данные | ${data.fullName}`}
+				size="md"
+				className="font-bold"
+			/>
 			<FormProvider {...form}>
 				<form
 					className="flex flex-col gap-5 w-96 mt-10"
