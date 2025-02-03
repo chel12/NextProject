@@ -1,4 +1,10 @@
-import { Container, Filters, Title, TopBar } from '@/shared/components/shared';
+import {
+	Container,
+	Filters,
+	Stories,
+	Title,
+	TopBar,
+} from '@/shared/components/shared';
 import { ProductsGroupList } from '@/shared/components/shared/products-group-list';
 import { findGames, GetSearchParams } from '@/shared/lib/find-games';
 import { Suspense } from 'react';
@@ -18,6 +24,9 @@ export default async function Home({
 			<TopBar
 				categories={categories.filter((c) => c.products.length > 0)}
 			/>
+
+			<Stories />
+
 			<Container className="mt-10 pb-14">
 				<div className="flex gap-[80px]">
 					{/*Филтьтрация*/}

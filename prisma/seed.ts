@@ -179,6 +179,88 @@ async function up() {
 			},
 		},
 	});
+	await prisma.story.createMany({
+		data: [
+			{
+				previewImageUrl:
+					'https://i.pinimg.com/736x/21/d9/a2/21d9a2a20346a55c62d773d6444e314e.jpg',
+			},
+			{
+				previewImageUrl:
+					'https://i.pinimg.com/736x/e9/56/0a/e9560a404bee66ddf4ace249bfebb664.jpg',
+			},
+			{
+				previewImageUrl:
+					'https://i.pinimg.com/736x/60/a7/f1/60a7f195ff450f0e56d1ed525d8a21b6.jpg',
+			},
+			{
+				previewImageUrl:
+					'https://i.pinimg.com/736x/c2/47/c2/c247c2cff0367b19b1a4beae0ebc1eaa.jpg',
+			},
+			{
+				previewImageUrl:
+					'https://i.pinimg.com/736x/36/7b/21/367b211afca91a2026b33b827364cc43.jpg',
+			},
+			{
+				previewImageUrl:
+					'https://i.pinimg.com/736x/01/64/48/01644841f6786547758d5dfb4a270f21.jpg',
+			},
+		],
+	});
+	await prisma.storyItem.createMany({
+		data: [
+			{
+				storyId: 13,
+				sourceUrl:
+					'https://i.pinimg.com/736x/ff/8e/65/ff8e65f546e61bc74615aacd5900af02.jpg',
+			},
+			{
+				storyId: 13,
+				sourceUrl:
+					'https://i.pinimg.com/736x/2c/23/d8/2c23d8218ea74f186de222789f0b0cc7.jpg',
+			},
+			{
+				storyId: 13,
+				sourceUrl:
+					'https://i.pinimg.com/736x/ca/46/74/ca46747fd528ccb8adeca640c6f1b781.jpg',
+			},
+			{
+				storyId: 13,
+				sourceUrl:
+					'https://i.pinimg.com/736x/03/7b/86/037b86e2b899e7ce4f0371e88be3ce1f.jpg',
+			},
+			{
+				storyId: 13,
+				sourceUrl:
+					'https://i.pinimg.com/736x/ed/c7/22/edc722cfb954c5929d5f92b661ca3ebc.jpg',
+			},
+			{
+				storyId: 14,
+				sourceUrl:
+					'https://i.pinimg.com/736x/b7/d7/e8/b7d7e8ec68d5f6d82e50af7245ded879.jpg',
+			},
+			{
+				storyId: 14,
+				sourceUrl:
+					'https://i.pinimg.com/736x/a8/f2/0f/a8f20ffede2052b7fc5a5e462de1507e.jpg',
+			},
+			{
+				storyId: 14,
+				sourceUrl:
+					'https://i.pinimg.com/736x/a4/39/88/a4398802beb32e5f287f04620344e47d.jpg',
+			},
+			{
+				storyId: 14,
+				sourceUrl:
+					'https://i.pinimg.com/736x/b8/2f/71/b82f71f0d630b22d9c00caae71a72094.jpg',
+			},
+			{
+				storyId: 14,
+				sourceUrl:
+					'https://i.pinimg.com/736x/76/2e/3a/762e3ae3e9ee0f35c1fc21463a5fe3f4.jpg',
+			},
+		],
+	});
 }
 async function down() {
 	//чтобы инкремент тоже очистить, прямой запрос
