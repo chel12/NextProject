@@ -4,7 +4,7 @@ import { NextRequest, NextResponse } from 'next/server';
 
 export async function PATCH(
 	req: NextRequest,
-	{ params }: { params: { id: number } }
+	{ params }: { params: { id: string } }
 ) {
 	try {
 		const id = Number(params.id);
@@ -46,7 +46,6 @@ export async function DELETE(
 	{ params }: { params: { id: string } }
 ) {
 	try {
-		const id = Number(params.id);
 		const token = req.cookies.get('cartToken')?.value;
 		if (!token) {
 			return NextResponse.json({ error: 'Cart token not found' });
