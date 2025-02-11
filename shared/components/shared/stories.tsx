@@ -40,15 +40,19 @@ export const Stories: React.FC = () => {
 							className="w-[200px] h-[250px] bg-gray-200 rounded-md animate-pulse"></div>
 					))}
 				{stories.map((story) => (
-					<img
+					<div
 						key={story.id}
-						onClick={() => onClickStory(story)}
-						className="rounded-md cursor-pointer"
-						height={250}
-						width={200}
-						src={story.previewImageUrl}
-						alt="stories"
-					/>
+						className="flex justify-center p-3 bg-secondary rounded-lg h-[260px]">
+						<img
+							key={story.id}
+							onClick={() => onClickStory(story)}
+							className="rounded-md cursor-pointer"
+							height={250}
+							width={200}
+							src={story.previewImageUrl}
+							alt="stories"
+						/>
+					</div>
 				))}
 				{open && (
 					<div className="absolute left-0 top-0 w-full h-full bg-black/80 flex items-center justify-center z-20">
