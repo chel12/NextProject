@@ -7,11 +7,7 @@ import ReactStories from 'react-insta-stories';
 import { cn } from '@/shared/lib/utils';
 import { X } from 'lucide-react';
 
-interface Props {
-	className?: string;
-}
-
-export const Stories: React.FC<Props> = ({ className }) => {
+export const Stories: React.FC = () => {
 	//все истории
 	const [stories, setStories] = React.useState<IStory[]>([]);
 	//открыть историю
