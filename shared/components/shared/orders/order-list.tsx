@@ -1,7 +1,8 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { OrderStatus } from '@prisma/client';
 
+// Сохраняем оригинальные интерфейсы
 interface OrderItem {
 	id: number;
 	status: OrderStatus;
@@ -9,13 +10,13 @@ interface OrderItem {
 	fullName: string;
 	createdAt: Date | string;
 	email: string;
-	items: any; // JSON-данные о товарах
+	items: any;
 }
 
 interface OrderDetails {
 	id: number;
 	name: string;
-	imageUrl: string; // Добавлено поле для изображения
+	imageUrl: string;
 	quantity: number;
 	price: number;
 	ingredients: {
@@ -31,9 +32,28 @@ interface Props {
 }
 
 export const OrderList: React.FC<Props> = ({ className, orders }) => {
+	const [localOrders, setLocalOrders] = useState<OrderItem[]>(orders);
 	const [selectedOrder, setSelectedOrder] = useState<number | null>(null);
 	const [orderDetails, setOrderDetails] = useState<OrderDetails[]>([]);
-	console.log(orders);
+	const [isUpdating, setIsUpdating] = useState<Record<number, boolean>>({});
+
+	// Синхронизация с пропсами с защитой от сброса при оптимистичном обновлении
+	useEffect(() => {
+		// Обновляем только если количество заказов изменилось
+		if (orders.length !== localOrders.length) {
+			setLocalOrders(orders);
+		} else {
+			// Сохраняем локальные статусы при обновлении данных
+			const updatedOrders = orders.map((order) => {
+				const localOrder = localOrders.find((o) => o.id === order.id);
+				return localOrder && localOrder.status !== order.status
+					? { ...order, status: localOrder.status }
+					: order;
+			});
+			setLocalOrders(updatedOrders);
+		}
+	}, [orders]);
+
 	const getStatusText = (status: OrderStatus) => {
 		switch (status) {
 			case 'PENDING':
@@ -60,6 +80,72 @@ export const OrderList: React.FC<Props> = ({ className, orders }) => {
 		}
 	};
 
+	const handleStatusChange = async (
+		orderId: number,
+		newStatus: OrderStatus
+	) => {
+		const order = localOrders.find((o) => o.id === orderId);
+		if (!order) return;
+
+		const originalStatus = order.status;
+
+		// Оптимистичное обновление UI
+		setLocalOrders((prev) =>
+			prev.map((order) =>
+				order.id === orderId ? { ...order, status: newStatus } : order
+			)
+		);
+
+		setIsUpdating((prev) => ({ ...prev, [orderId]: true }));
+
+		try {
+			const response = await fetch('/api/orders/updateStatus', {
+				method: 'PATCH',
+				headers: { 'Content-Type': 'application/json' },
+				body: JSON.stringify({
+					orderId,
+					status: newStatus,
+				}),
+			});
+
+			// Детальная обработка ошибок
+			if (!response.ok) {
+				const errorData = await response.json();
+				throw new Error(
+					`HTTP error! status: ${response.status}, message: ${errorData.error}`
+				);
+			}
+
+			const updatedOrder = await response.json();
+			console.log('Order updated successfully:', updatedOrder);
+		} catch (error) {
+			console.error('Update failed:', error);
+			// Откат при ошибке
+			setLocalOrders((prev) =>
+				prev.map((order) =>
+					order.id === orderId
+						? { ...order, status: originalStatus }
+						: order
+				)
+			);
+
+			// Показываем пользователю сообщение об ошибке
+			alert(
+				`Не удалось обновить статус: ${
+					error instanceof Error
+						? error.message
+						: 'Неизвестная ошибка'
+				}`
+			);
+		} finally {
+			setIsUpdating((prev) => {
+				const newState = { ...prev };
+				delete newState[orderId];
+				return newState;
+			});
+		}
+	};
+
 	const handleOrderClick = async (orderId: number, itemsData: any) => {
 		if (selectedOrder === orderId) {
 			setSelectedOrder(null);
@@ -67,19 +153,27 @@ export const OrderList: React.FC<Props> = ({ className, orders }) => {
 		}
 
 		try {
-			const items = JSON.parse(itemsData);
-			console.log(items);
+			// Улучшенная обработка данных
+			const items =
+				typeof itemsData === 'string'
+					? JSON.parse(itemsData)
+					: itemsData;
+
 			const details = items.map((item: any) => ({
-				id: item.productItemId,
-				name: item.productItem.product.name,
-				imageUrl: item.productItem.product.imageUrl, // Добавлено изображение
+				id: item.productItemId || item.id,
+				name: item.productItem?.product?.name || item.name,
+				imageUrl:
+					item.productItem?.product?.imageUrl ||
+					item.imageUrl ||
+					'/placeholder.jpg',
 				quantity: item.quantity,
-				price: item.priceAtOrder || item.price,
-				ingredients: item.ingredients.map((ing: any) => ({
-					id: ing.id,
-					name: ing.name,
-					price: ing.price,
-				})),
+				price: item.priceAtOrder || item.price || 0,
+				ingredients:
+					item.ingredients?.map((ing: any) => ({
+						id: ing.id,
+						name: ing.name,
+						price: ing.price || 0,
+					})) || [],
 			}));
 
 			setOrderDetails(details);
@@ -114,7 +208,7 @@ export const OrderList: React.FC<Props> = ({ className, orders }) => {
 					</tr>
 				</thead>
 				<tbody className="bg-white divide-y divide-gray-200">
-					{orders.map((order) => (
+					{localOrders.map((order) => (
 						<React.Fragment key={order.id}>
 							<tr
 								onClick={() =>
@@ -140,12 +234,56 @@ export const OrderList: React.FC<Props> = ({ className, orders }) => {
 									{order.totalAmount} руб.
 								</td>
 								<td className="px-6 py-4 whitespace-nowrap">
-									<span
-										className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${getStatusColor(
-											order.status
-										)}`}>
-										{getStatusText(order.status)}
-									</span>
+									<div className="flex items-center space-x-2">
+										<select
+											value={order.status}
+											onChange={(e) =>
+												handleStatusChange(
+													order.id,
+													e.target
+														.value as OrderStatus
+												)
+											}
+											disabled={isUpdating[order.id]}
+											onClick={(e) => e.stopPropagation()}
+											className={`min-w-[120px] px-2 py-1 rounded-full text-xs font-semibold ${getStatusColor(
+												order.status
+											)} ${
+												isUpdating[order.id]
+													? 'opacity-50 cursor-not-allowed'
+													: 'cursor-pointer'
+											} focus:ring-1 focus:ring-blue-500`}>
+											<option value="PENDING">
+												В обработке
+											</option>
+											<option value="SUCCEEDED">
+												Выполнен
+											</option>
+											<option value="CANCELLED">
+												Отменен
+											</option>
+										</select>
+
+										{isUpdating[order.id] && (
+											<svg
+												className="animate-spin h-4 w-4 text-gray-500"
+												xmlns="http://www.w3.org/2000/svg"
+												fill="none"
+												viewBox="0 0 24 24">
+												<circle
+													className="opacity-25"
+													cx="12"
+													cy="12"
+													r="10"
+													stroke="currentColor"
+													strokeWidth="4"></circle>
+												<path
+													className="opacity-75"
+													fill="currentColor"
+													d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+											</svg>
+										)}
+									</div>
 								</td>
 							</tr>
 
@@ -167,7 +305,6 @@ export const OrderList: React.FC<Props> = ({ className, orders }) => {
 																key={item.id}
 																className="border-b pb-3 last:border-0">
 																<div className="flex items-center">
-																	{/* Добавлено изображение товара */}
 																	<img
 																		src={
 																			item.imageUrl
@@ -176,10 +313,17 @@ export const OrderList: React.FC<Props> = ({ className, orders }) => {
 																			item.name
 																		}
 																		className="w-16 h-16 object-cover rounded mr-4"
+																		onError={(
+																			e
+																		) => {
+																			(
+																				e.target as HTMLImageElement
+																			).src =
+																				'/placeholder.jpg';
+																		}}
 																	/>
 
 																	<div className="flex-1">
-																		{/* Добавлено название товара */}
 																		<h4 className="font-medium text-gray-900 mb-1">
 																			{
 																				item.name
@@ -197,12 +341,12 @@ export const OrderList: React.FC<Props> = ({ className, orders }) => {
 																			<span>
 																				{
 																					item.price
-																				}
+																				}{' '}
 																				руб.
-																				×
+																				×{' '}
 																				{
 																					item.quantity
-																				}
+																				}{' '}
 																				шт.
 																			</span>
 																		</div>
