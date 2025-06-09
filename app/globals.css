@@ -116,3 +116,7 @@ html {
 #nprogress .spinner-icon {
 	@apply border-t-primary border-r-primary !important;
 }
+.accordion-content {
+	transition: max-height 0.3s ease-out, opacity 0.3s ease;
+	overflow: hidden;
+}

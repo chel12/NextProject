@@ -1,7 +1,6 @@
 
 import { Container, InfoBlock, Title } from '@/shared/components';
 import React from 'react';
-import { useSession } from 'next-auth/react';
 import { OrderList } from '@/shared/components/shared/orders/order-list';
 import { prisma } from '@/prisma/prisma-client';
 import { getServerSession } from 'next-auth';
@@ -15,12 +14,14 @@ const orders = await prisma.order.findMany({
 	  fullName: true,
 	  email: true,
 	  createdAt: true,
+	  items: true, // Добавьте это поле
 	},
 	orderBy: {
 	  createdAt: 'desc',
 	},
-	take: 50, // Ограничение количества заказов
+	take: 50,
  });
+
  const session = await getServerSession(authOptions);
  
  export default function DashboardPage() {
