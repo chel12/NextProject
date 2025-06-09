@@ -10,6 +10,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import toast from 'react-hot-toast';
 import { useSession, signIn } from 'next-auth/react';
 import { set } from 'react-hook-form';
+import { Button } from '..';
 
 interface Props {
 	hasSearch?: boolean;
@@ -25,7 +26,7 @@ export const Header: React.FC<Props> = ({
 	const router = useRouter();
 	const [openAuthModal, setOpenAuthModal] = React.useState(false);
 	const searchParams = useSearchParams();
-
+	const { data: session } = useSession();
 	React.useEffect(() => {
 		let toastMessage = '';
 		if (searchParams.has('paid')) {
@@ -84,7 +85,17 @@ export const Header: React.FC<Props> = ({
 					<ProfileButton
 						onClickSignIn={() => setOpenAuthModal(true)}
 					/>
-					{hasCart && <CartButton />}
+
+					{session?.user?.role === 'ADMIN' || 'MANAGER' ? (
+						<Button
+							onClick={() => router.push('/dashboard')}
+							title="Dashboard"
+							variant="outline">
+							Админ панель
+						</Button>
+					) : (
+						<CartButton />
+					)}
 				</div>
 			</Container>
 		</header>
