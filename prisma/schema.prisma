@@ -163,6 +163,7 @@ model StoryItem {
  }
  enum UserRole {
 	USER
-	ADMIN	
+	ADMIN
+	MANAGER
  }
 

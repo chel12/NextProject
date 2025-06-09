@@ -8,6 +8,11 @@ interface Props {
 	onClickSignIn?: () => void;
 	className?: string;
 }
+export const enum Role {
+	USER = 'Пользователь',
+	MANAGER = 'Менеджер',
+	ADMIN = 'Aдминистратор',
+}
 
 export const ProfileButton: React.FC<Props> = ({
 	className,
@@ -30,7 +35,12 @@ export const ProfileButton: React.FC<Props> = ({
 						variant="secondary"
 						className="flex items-center gap-2">
 						<CircleUser size={16} />
-						Профиль
+						{session.user.name} |{' '}
+						{session.user.role === 'ADMIN'
+							? Role.ADMIN
+							: session.user.role === 'MANAGER'
+							? Role.MANAGER
+							: Role.USER}
 					</Button>
 				</Link>
 			)}
