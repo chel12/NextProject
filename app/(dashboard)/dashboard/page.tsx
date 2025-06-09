@@ -1,6 +1,5 @@
-'use client';
-
-import { Container, Title } from '@/shared/components';
+'use client'
+import { Container, InfoBlock, Title } from '@/shared/components';
 import React from 'react';
 import { useSession } from 'next-auth/react';
 
@@ -13,17 +12,20 @@ export default function DashboardPage() {
 				className=" font-extrabold mb-8 text-[36px]"
 				text="Управление заказами"
 			/>
-			{session?.user?.role === 'MANAGER' ? (
+			{session?.user?.role === 'MANAGER' ||
+			session?.user?.role === 'ADMIN' ? (
 				<>
 					<div>Менеджер</div>
 				</>
 			) : (
-				<>
-					<div>Нет Прав</div>
-				</>
+				<div className="flex flex col items-center justify-center mt-40">
+					<InfoBlock
+						title="Доступ запрещен"
+						text="Данную страницу могут просматривать только авторизованные пользователи"
+						imageUrl="/assets/images/lock.png"
+					/>
+				</div>
 			)}
 		</Container>
 	);
 }
-
-

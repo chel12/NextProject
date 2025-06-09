@@ -86,7 +86,8 @@ export const Header: React.FC<Props> = ({
 						onClickSignIn={() => setOpenAuthModal(true)}
 					/>
 
-					{session?.user?.role === 'ADMIN' || 'MANAGER' ? (
+					{session?.user?.role === 'ADMIN' ||
+					session?.user?.role === 'MANAGER' ? (
 						<Button
 							onClick={() => router.push('/dashboard')}
 							title="Dashboard"
