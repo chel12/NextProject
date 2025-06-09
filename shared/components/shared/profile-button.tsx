@@ -39,8 +39,8 @@ export const ProfileButton: React.FC<Props> = ({
 						{session.user.role === 'ADMIN'
 							? Role.ADMIN
 							: session.user.role === 'MANAGER'
-							? Role.MANAGER
-							: Role.USER}
+								? Role.MANAGER
+								: Role.USER}
 					</Button>
 				</Link>
 			)}
