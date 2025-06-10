@@ -1,7 +1,17 @@
-import { prisma } from "@/prisma/prisma-client";
-import { NextResponse } from "next/server";
+import { prisma } from '@/prisma/prisma-client';
+import { NextResponse } from 'next/server';
 
 export async function GET() {
-	const ingredients = await prisma.ingredient.findMany();
-	return NextResponse.json(ingredients);
+	try {
+		const ingredients = await prisma.ingredient.findMany({
+			orderBy: { name: 'asc' },
+		});
+		return NextResponse.json(ingredients);
+	} catch (error) {
+		console.error('Ошибка получения ингредиентов:', error);
+		return NextResponse.json(
+			{ error: 'Ошибка сервера при загрузке ингредиентов' },
+			{ status: 500 }
+		);
+	}
 }
