@@ -1,40 +1,22 @@
 import { Container, InfoBlock, Title } from '@/shared/components';
 import React from 'react';
 import { OrderList } from '@/shared/components/shared/orders/order-list';
-import { prisma } from '@/prisma/prisma-client';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/shared/constants/auth-options';
-import ProductAdminPanel from '@/shared/components/product-admin-panel';
 import ProductManager from '@/shared/components/shared/product-manager';
-
-const orders = await prisma.order.findMany({
-	select: {
-		id: true,
-		status: true,
-		totalAmount: true,
-		fullName: true,
-		email: true,
-		createdAt: true,
-		items: true, // Добавьте это поле
-	},
-	orderBy: {
-		createdAt: 'desc',
-	},
-	take: 50,
-});
 
 const session = await getServerSession(authOptions);
 
-export default function DashboardPage() {
+export default function AdminPanel() {
 	return (
 		<Container className="mt-8">
 			<Title
 				className=" font-extrabold mb-8 text-[36px]"
-				text="Управление заказами"
+				text="Управление сайтом"
 			/>
-			{session?.user.role === 'MANAGER' ||
-			session?.user.role === 'ADMIN' ? (
-				<OrderList orders={orders}></OrderList>
+
+			{session?.user.role === 'ADMIN' ? (
+				<ProductManager />
 			) : (
 				<div className="flex flex-col items-center justify-center mt-40">
 					<InfoBlock

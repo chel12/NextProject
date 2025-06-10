@@ -86,14 +86,21 @@ export const Header: React.FC<Props> = ({
 						onClickSignIn={() => setOpenAuthModal(true)}
 					/>
 
-					{session?.user?.role === 'ADMIN' ||
-					session?.user?.role === 'MANAGER' ? (
-						<Button
-							onClick={() => router.push('/dashboard')}
-							title="Dashboard"
-							variant="outline">
-							Админ панель
-						</Button>
+					{session?.user?.role === 'ADMIN' ? (
+						<>
+							<Button
+								onClick={() => router.push('/adminpanel')}
+								title="Dashboard"
+								variant="outline">
+								Админка
+							</Button>
+							<Button
+								onClick={() => router.push('/dashboard')}
+								title="Dashboard"
+								variant="outline">
+								Заказы
+							</Button>
+						</>
 					) : (
 						<CartButton />
 					)}
