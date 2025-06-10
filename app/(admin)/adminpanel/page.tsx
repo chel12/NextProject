@@ -4,6 +4,7 @@ import { OrderList } from '@/shared/components/shared/orders/order-list';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/shared/constants/auth-options';
 import ProductManager from '@/shared/components/shared/product-manager';
+import UserList from '@/shared/components/user-list';
 
 const session = await getServerSession(authOptions);
 
@@ -16,7 +17,10 @@ export default function AdminPanel() {
 			/>
 
 			{session?.user.role === 'ADMIN' ? (
-				<ProductManager />
+				<>
+					<UserList />
+					<ProductManager />
+				</>
 			) : (
 				<div className="flex flex-col items-center justify-center mt-40">
 					<InfoBlock

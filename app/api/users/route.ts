@@ -15,3 +15,20 @@ export async function POST(req: NextRequest) {
 	});
 	return NextResponse.json(user);
 }
+// app/api/users/route.ts
+export async function PUT(req: NextRequest) {
+	const data = await req.json();
+	const { id, ...rest } = data;
+
+	const updatedUser = await prisma.user.update({
+		where: { id },
+		data: rest,
+	});
+	return NextResponse.json(updatedUser);
+}
+
+export async function DELETE(req: NextRequest) {
+	const { id } = await req.json();
+	await prisma.user.delete({ where: { id } });
+	return NextResponse.json({ message: 'User deleted' });
+}
