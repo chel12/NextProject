@@ -43,14 +43,12 @@ export async function GET() {
 			try {
 				itemsParsed = JSON.parse(order.items as string);
 			} catch {
-				// Если парсинг не удался — вернем пустой массив
 				itemsParsed = [];
 			}
 
 			const detailedItems = await Promise.all(
 				itemsParsed.map(async (item) => {
 					if (!item.productItem?.id) {
-						// Если нет productItem или id — возвращаем item как есть, без деталей
 						return {
 							...item,
 							productItem: null,
@@ -61,13 +59,28 @@ export async function GET() {
 					const productItemWithProduct =
 						await prisma.productItem.findUnique({
 							where: { id: item.productItem.id },
-							include: { product: true },
+							select: {
+								id: true,
+								price: true,
+								product: {
+									select: {
+										name: true,
+										imageUrl: true,
+									},
+								},
+							},
 						});
 
 					const ingredients = await Promise.all(
 						(item.ingredients || []).map((ing) =>
 							prisma.ingredient.findUnique({
 								where: { id: ing.id },
+								select: {
+									id: true,
+									name: true,
+									ImageUrl: true,
+									price: true,
+								},
 							})
 						)
 					);

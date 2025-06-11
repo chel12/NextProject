@@ -1,6 +1,5 @@
 'use client';
 
-import Image from 'next/image';
 import { Order, OrderStatus } from '@prisma/client';
 import { useEffect, useState } from 'react';
 import { Api } from '@/services/api-client';
@@ -79,43 +78,128 @@ export default function UserOrdersPage() {
 						</div>
 
 						{isExpanded && (
-							<div className="border-t pt-4 space-y-4">
-								{order.items.map((item) => (
-									<div
-										key={item.id}
-										className="flex items-center border p-3 rounded space-x-4">
-										<Image
-											src={
-												item.productItem?.product
-													?.imageUrl ||
-												'/no-image.png'
-											}
-											alt={
-												item.productItem?.product
-													?.name || 'Продукт'
-											}
-											width={80}
-											height={80}
-											className="rounded-lg object-cover"
-										/>
-										<div>
-											<p className="font-medium">
-												{item.productItem?.product
-													?.name ||
-													'Неизвестный продукт'}{' '}
-												× {item.quantity}
-											</p>
-											{item.ingredients.length > 0 && (
-												<p className="text-sm text-muted-foreground">
-													Ингредиенты:{' '}
-													{item.ingredients
-														.map((i) => i.name)
-														.join(', ')}
-												</p>
-											)}
-										</div>
-									</div>
-								))}
+							<div className="border-t pt-4">
+								<table className="w-full border-collapse border border-gray-300 text-left">
+									<thead>
+										<tr>
+											<th className="border border-gray-300 p-2">
+												Изображение
+											</th>
+											<th className="border border-gray-300 p-2">
+												Название
+											</th>
+											<th className="border border-gray-300 p-2">
+												Цена за шт.
+											</th>
+											<th className="border border-gray-300 p-2">
+												Количество
+											</th>
+											<th className="border border-gray-300 p-2">
+												Ингредиенты
+											</th>
+											<th className="border border-gray-300 p-2">
+												Цена ингредиентов
+											</th>
+										</tr>
+									</thead>
+									<tbody>
+										{order.items.map((item) => {
+											const product =
+												item.productItem?.product;
+											const productPrice =
+												item.productItem?.price ?? 0;
+											const totalIngredientsPrice =
+												item.ingredients.reduce(
+													(sum, ing) =>
+														sum + (ing.price ?? 0),
+													0
+												);
+
+											return (
+												<tr
+													key={item.id}
+													className="border border-gray-300">
+													<td className="border border-gray-300 p-2">
+														{product?.imageUrl ? (
+															<img
+																src={
+																	product.imageUrl
+																}
+																alt={
+																	product.name
+																}
+																width={60}
+																height={60}
+																className="rounded object-cover"
+															/>
+														) : (
+															'—'
+														)}
+													</td>
+													<td className="border border-gray-300 p-2">
+														{product?.name ??
+															'Неизвестный продукт'}
+													</td>
+													<td className="border border-gray-300 p-2">
+														{productPrice} ₽
+													</td>
+													<td className="border border-gray-300 p-2">
+														{item.quantity}
+													</td>
+													<td className="border border-gray-300 p-2">
+														{item.ingredients
+															.length > 0 ? (
+															<ul>
+																{item.ingredients.map(
+																	(ing) => (
+																		<li
+																			key={
+																				ing.id
+																			}
+																			className="flex items-center space-x-2">
+																			{ing.ImageUrl ? (
+																				<img
+																					src={
+																						ing.ImageUrl
+																					}
+																					alt={
+																						ing.name
+																					}
+																					width={
+																						30
+																					}
+																					height={
+																						30
+																					}
+																					className="rounded object-cover"
+																				/>
+																			) : (
+																				<span>
+																					—
+																				</span>
+																			)}
+																			<span>
+																				{
+																					ing.name
+																				}
+																			</span>
+																		</li>
+																	)
+																)}
+															</ul>
+														) : (
+															'Без ингредиентов'
+														)}
+													</td>
+													<td className="border border-gray-300 p-2">
+														{totalIngredientsPrice}{' '}
+														₽
+													</td>
+												</tr>
+											);
+										})}
+									</tbody>
+								</table>
 							</div>
 						)}
 					</Card>
