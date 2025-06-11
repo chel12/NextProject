@@ -3,10 +3,12 @@
 import { prisma } from '@/prisma/prisma-client';
 import { PayOrderTemplate, VerificationUser } from '@/shared/components';
 import { CheckoutFormValues } from '@/shared/constants';
+import { authOptions } from '@/shared/constants/auth-options';
 import { createPayments, sendEmail } from '@/shared/lib';
 import { getUserSession } from '@/shared/lib/get-user-session';
 import { OrderStatus, Prisma } from '@prisma/client';
 import { hashSync } from 'bcrypt';
+import { getServerSession } from 'next-auth';
 import { cookies } from 'next/headers';
 
 export async function createOrder(data: CheckoutFormValues) {
@@ -18,10 +20,19 @@ export async function createOrder(data: CheckoutFormValues) {
 			throw new Error('Cart token not found');
 		}
 
-		/* Находим корзину по токену */
+		// Получаем сессию пользователя
+		const session = await getServerSession(authOptions);
+		if (!session?.user) {
+			throw new Error('User not authenticated');
+		}
+
+		// userId из сессии (у тебя в сессии user.id может быть string, приводим к number)
+		const userId = session.user.id ? Number(session.user.id) : null;
+
+		// Находим корзину по токену
 		const userCart = await prisma.cart.findFirst({
+			where: { token: cartToken },
 			include: {
-				user: true,
 				items: {
 					include: {
 						ingredients: true,
@@ -33,24 +44,20 @@ export async function createOrder(data: CheckoutFormValues) {
 					},
 				},
 			},
-			where: {
-				token: cartToken,
-			},
 		});
 
-		/* Если корзина не найдена возращаем ошибку */
 		if (!userCart) {
 			throw new Error('Cart not found');
 		}
 
-		/* Если корзина пустая возращаем ошибку */
-		if (userCart?.totalAmount === 0) {
+		if (userCart.totalAmount === 0) {
 			throw new Error('Cart is empty');
 		}
 
-		/* Создаем заказ */
+		// Создаем заказ, передаем userId из сессии, а не из корзины
 		const order = await prisma.order.create({
 			data: {
+				userId, // <--- здесь явно userId из сессии
 				token: cartToken,
 				fullName: data.firstName + ' ' + data.lastName,
 				email: data.email,
@@ -63,20 +70,14 @@ export async function createOrder(data: CheckoutFormValues) {
 			},
 		});
 
-		/* Очищаем корзину */
+		// Очищаем корзину
 		await prisma.cart.update({
-			where: {
-				id: userCart.id,
-			},
-			data: {
-				totalAmount: 0,
-			},
+			where: { id: userCart.id },
+			data: { totalAmount: 0 },
 		});
 
 		await prisma.cartItem.deleteMany({
-			where: {
-				cartId: userCart.id,
-			},
+			where: { cartId: userCart.id },
 		});
 
 		const paymentData = await createPayments({
@@ -90,9 +91,7 @@ export async function createOrder(data: CheckoutFormValues) {
 		}
 
 		await prisma.order.update({
-			where: {
-				id: order.id,
-			},
+			where: { id: order.id },
 			data: {
 				paymendId: paymentData.id,
 			},
@@ -113,6 +112,7 @@ export async function createOrder(data: CheckoutFormValues) {
 		return paymentUrl;
 	} catch (err) {
 		console.log('[CreateOrder] Server error', err);
+		throw err;
 	}
 }
 

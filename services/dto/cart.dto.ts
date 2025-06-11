@@ -1,10 +1,4 @@
-import { ingredients } from './../../prisma/constants';
-import { gameType, gameEdition } from './../../shared/constants/game';
-{
-	/*
-Типизация полного овтета корзины в CartDTO
-*/
-}
+
 import {
 	Cart,
 	CartItem,
