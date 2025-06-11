@@ -1,6 +1,5 @@
 import { Container, InfoBlock, Title } from '@/shared/components';
 import React from 'react';
-import { OrderList } from '@/shared/components/shared/orders/order-list';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/shared/constants/auth-options';
 import ProductManager from '@/shared/components/shared/product-manager';
