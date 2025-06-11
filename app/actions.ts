@@ -193,3 +193,21 @@ export async function registerUser(body: Prisma.UserCreateInput) {
 		throw err;
 	}
 }
+export async function getUserOrders() {
+	const session = await getUserSession();
+
+	if (!session?.id) {
+		throw new Error('User not authenticated');
+	}
+
+	const orders = await prisma.order.findMany({
+		where: {
+			userId: Number(session.id),
+		},
+		orderBy: {
+			createdAt: 'desc',
+		},
+	});
+
+	return orders;
+}
