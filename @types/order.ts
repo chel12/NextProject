@@ -9,19 +9,6 @@ export type OrderItemDTO = {
 	};
 	ingredients: Ingredient[];
 };
-// types.ts
-// export interface Order {
-// 	id: number;
-// 	fullName: string;
-// 	email: string;
-// 	address: string;
-// 	comment: string;
-// 	totalAmount: number;
-// 	status: string;
-// 	items: string; // JSON string
-// 	createdAt: string;
-// }
-import { Order, OrderStatus } from '@prisma/client';
 
 export type OrderWithItems = Order & {
 	items: OrderItem[];
@@ -38,3 +25,8 @@ export type OrderItem = {
 		price: number;
 	}[];
 };
+import { Order, User, OrderStatus } from '@prisma/client';
+
+export interface OrderWithUser extends Order {
+	user: User | null;
+}

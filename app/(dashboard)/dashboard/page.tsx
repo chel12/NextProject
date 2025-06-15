@@ -3,7 +3,8 @@ import React from 'react';
 import { prisma } from '@/prisma/prisma-client';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/shared/constants/auth-options';
-import OrderList from '@/shared/components/order-list';
+import { OrderList } from '@/shared/components/order-list';
+
 
 const orders = await prisma.order.findMany({
 	select: {
