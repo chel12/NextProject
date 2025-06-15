@@ -3,7 +3,7 @@ import React from 'react';
 import { prisma } from '@/prisma/prisma-client';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/shared/constants/auth-options';
-import { OrderList } from '@/shared/components/order-list';
+import OrdersList from '@/shared/components/order-list';
 
 
 const orders = await prisma.order.findMany({
@@ -33,7 +33,7 @@ export default function DashboardPage() {
 			/>
 			{session?.user.role === 'MANAGER' ||
 			session?.user.role === 'ADMIN' ? (
-				<OrderList />
+				<OrdersList />
 			) : (
 				<div className="flex flex-col items-center justify-center mt-40">
 					<InfoBlock
