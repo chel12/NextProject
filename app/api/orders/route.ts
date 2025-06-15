@@ -28,7 +28,12 @@ export async function GET() {
 			orderBy: { createdAt: 'desc' },
 		});
 
-		return NextResponse.json(orders);
+		const serializedOrders = orders.map((order) => ({
+			...order,
+			items: order.items ? JSON.parse(JSON.stringify(order.items)) : [],
+		}));
+
+		return NextResponse.json(serializedOrders);
 	} catch (error) {
 		return NextResponse.json(
 			{ error: 'Failed to fetch orders' },

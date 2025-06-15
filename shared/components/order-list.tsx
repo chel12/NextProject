@@ -139,8 +139,11 @@ function OrderRow({
 	onToggleExpand: () => void;
 	onStatusChange: (status: OrderStatus) => void;
 }) {
-	const orderItems = order.items as unknown as OrderItem[];
-
+	const orderItems = Array.isArray(order.items)
+		? order.items
+		: typeof order.items === 'string'
+		? JSON.parse(order.items)
+		: [];
 	return (
 		<>
 			<tr
@@ -219,19 +222,28 @@ function StatusSelect({
 }
 
 // Компонент деталей заказа
-function OrderDetails({
-	order,
-	items,
-}: {
-	order: OrderWithUser;
-	items: OrderItem[];
-}) {
+function OrderDetails({ order, items }: { order: OrderWithUser; items: any }) {
+	const normalizeItems = (rawItems: any): OrderItem[] => {
+		if (Array.isArray(rawItems)) return rawItems;
+
+		try {
+			if (typeof rawItems === 'string') {
+				return JSON.parse(rawItems);
+			}
+			return [];
+		} catch (error) {
+			console.error('Error parsing order items:', error);
+			return [];
+		}
+	};
+
+	const orderItems = normalizeItems(items);
 	return (
 		<div className="grid grid-cols-1 md:grid-cols-2 gap-6">
 			<div>
 				<h3 className="text-lg font-medium mb-4">Order Items</h3>
 				<div className="space-y-4">
-					{items.map((item, index) => (
+					{orderItems.map((item, index) => (
 						<div key={index} className="border-b pb-4">
 							<div className="flex justify-between">
 								<h4 className="font-medium">
