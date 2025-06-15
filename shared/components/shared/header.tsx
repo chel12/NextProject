@@ -101,8 +101,20 @@ export const Header: React.FC<Props> = ({
 								Заказы
 							</Button>
 						</>
+					) : session?.user?.role === 'MANAGER' ? (
+						<Button
+							onClick={() => router.push('/dashboard')}
+							title="Dashboard"
+							variant="outline">
+							Заказы
+						</Button>
 					) : (
-						<CartButton />
+						<>
+							<Link href="/orderinfo">
+								<Button variant="outline">Заказы</Button>
+							</Link>
+							<CartButton />
+						</>
 					)}
 				</div>
 			</Container>
