@@ -30,7 +30,10 @@ export default async function ProfilePage() {
 					<ProfileForm data={user} />
 				</div>
 				<div>
-					<ProfileOrders orders={orders} />
+					<ProfileOrders
+						orders={orders}
+						currentUser={{ id: user.id, role: user.role }}
+					/>
 				</div>
 			</div>
 		</Container>

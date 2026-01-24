@@ -1,6 +1,6 @@
 'use client';
 import { cn } from '@/shared/lib/utils';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Container } from './container';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -24,7 +24,33 @@ export const Header: React.FC<Props> = ({
 }) => {
 	const router = useRouter();
 	const [openAuthModal, setOpenAuthModal] = React.useState(false);
+	const [userRole, setUserRole] = React.useState<string | null>(null);
+	const { data: session } = useSession();
 	const searchParams = useSearchParams();
+
+	React.useEffect(() => {
+		const fetchUserRole = async () => {
+			if (session?.user?.id) {
+				try {
+					const response = await fetch(
+						`/api/users?id=${session.user.id}`,
+					);
+					if (response.ok) {
+						const userData = await response.json();
+						setUserRole(userData.role);
+					}
+				} catch (error) {
+					console.error('Error fetching user role:', error);
+				}
+			}
+		};
+
+		if (session) {
+			fetchUserRole();
+		} else {
+			setUserRole(null);
+		}
+	}, [session]);
 
 	React.useEffect(() => {
 		let toastMessage = '';
@@ -84,7 +110,7 @@ export const Header: React.FC<Props> = ({
 					<ProfileButton
 						onClickSignIn={() => setOpenAuthModal(true)}
 					/>
-					{hasCart && <CartButton />}
+					{hasCart && userRole !== 'ADMIN' && <CartButton />}
 				</div>
 			</Container>
 		</header>

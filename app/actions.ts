@@ -322,3 +322,37 @@ export async function registerUser(body: Prisma.UserCreateInput) {
 		throw error;
 	}
 }
+
+//функция для обновления статуса заказа администратором
+export async function updateOrderStatus(
+	orderId: number,
+	newStatus: OrderStatus,
+) {
+	try {
+		const currentUser = await getUserSession();
+
+		if (!currentUser) {
+			throw new Error('Пользователь не авторизован');
+		}
+
+		// Проверяем, является ли пользователь администратором
+		const user = await prisma.user.findUnique({
+			where: { id: Number(currentUser.id) },
+		});
+
+		if (user?.role !== 'ADMIN') {
+			throw new Error('Недостаточно прав для изменения статуса заказа');
+		}
+
+		// Обновляем статус заказа
+		const updatedOrder = await prisma.order.update({
+			where: { id: orderId },
+			data: { status: newStatus },
+		});
+
+		return updatedOrder;
+	} catch (error) {
+		console.log('[UpdateOrderStatus] Server error', error);
+		throw error;
+	}
+}
