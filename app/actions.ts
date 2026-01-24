@@ -96,11 +96,12 @@ export async function createOrder(data: CheckoutFormValues) {
 			},
 			//paymentId id юкассы оплат, индификатор платежа
 			data: {
-				paymendId: paymentData.id,
+				paymentId: paymentData.id,
 			},
 		});
 
-		//*RESEND БИБЛИОТЕКА для теста отправки писем
+		//!RESEND БИБЛИОТЕКА для теста отправки писем
+
 		/* ссылка перенаправления на оплату*/
 		const paymentUrl = paymentData.confirmation.confirmation_url;
 		/* отправка */
@@ -111,7 +112,7 @@ export async function createOrder(data: CheckoutFormValues) {
 				orderId: order.id,
 				totalAmount: order.totalAmount,
 				paymentUrl,
-			})
+			}),
 		);
 
 		return paymentUrl;
@@ -124,21 +125,21 @@ export async function createOrder(data: CheckoutFormValues) {
 export async function updateUserInfo(body: Prisma.UserUpdateInput) {
 	try {
 		//проверка авторизации
-		const currenyUser = await getUserSession();
+		const currentUser = await getUserSession();
 
-		if (!currenyUser) {
+		if (!currentUser) {
 			throw new Error('Пользователь не найден');
 		}
 
 		const findUser = await prisma.user.findFirst({
 			where: {
-				id: Number(currenyUser.id),
+				id: Number(currentUser.id),
 			},
 		});
 
 		await prisma.user.update({
 			where: {
-				id: Number(currenyUser.id),
+				id: Number(currentUser.id),
 			},
 			data: {
 				fullName: body.fullName,
@@ -189,10 +190,10 @@ export async function registerUser(body: Prisma.UserCreateInput) {
 		//отправка письма
 		await sendEmail(
 			createdUser.email,
-			'Next Game | Подтверждение регистрации',
+			'Next Game | 📝 Подтверждение регистрации',
 			VerificationUser({
 				code,
-			})
+			}),
 		);
 	} catch (error) {
 		console.log('Ошибка регистрации', error);

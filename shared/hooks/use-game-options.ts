@@ -6,9 +6,9 @@ import { getAvailableGamePlatforms } from '../lib';
 import { ProductItem } from '@prisma/client';
 
 interface ReturnProps {
-	platformType: GameEdition;
+	gamePlatform: GameEdition;
 	type: GameType;
-	setPlatformType: (platformType: GameEdition) => void;
+	setPlatformType: (gamePlatform: GameEdition) => void;
 	setType: (type: GameType) => void;
 	selectedIngredients: Set<number>;
 	availableTypes: Variant[];
@@ -17,25 +17,25 @@ interface ReturnProps {
 }
 
 export const useGameOptions = (items: ProductItem[]): ReturnProps => {
-	const [platformType, setPlatformType] = React.useState<GameEdition>(1);
+	const [gamePlatform, setPlatformType] = React.useState<GameEdition>(1);
 	const [type, setType] = React.useState<GameType>(1);
 	const [selectedIngredients, { toggle: addIngredient }] = useSet(
-		new Set<number>([])
+		new Set<number>([]),
 	);
 
 	const availableTypes = getAvailableGamePlatforms(type, items);
 	//найти вариацию на основе опций
 	const currentItemId = items.find(
-		(item) => item.gameType === type && item.platformType === platformType
+		(item) => item.gameType === type && item.gamePlatform === gamePlatform,
 	)?.id;
 
 	//проверка изданияи типов его, покажет первое доступное
 	React.useEffect(() => {
 		const isAvailablePlatform = availableTypes?.find(
-			(item) => Number(item.value) == platformType && !item.disabled
+			(item) => Number(item.value) == gamePlatform && !item.disabled,
 		);
 		const availablePlatform = availableTypes?.find(
-			(item) => !item.disabled
+			(item) => !item.disabled,
 		);
 		if (!isAvailablePlatform && availablePlatform) {
 			setPlatformType(Number(availablePlatform.value) as GameEdition);
@@ -43,7 +43,7 @@ export const useGameOptions = (items: ProductItem[]): ReturnProps => {
 	}, [type]);
 	return {
 		availableTypes,
-		platformType,
+		gamePlatform,
 		type,
 		setPlatformType,
 		setType,

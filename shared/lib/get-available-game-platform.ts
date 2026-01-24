@@ -4,7 +4,7 @@ import { Variant } from '../components/shared/group-variants';
 
 export const getAvailableGamePlatforms = (
 	type: GameType,
-	items: ProductItem[]
+	items: ProductItem[],
 ): Variant[] => {
 	/*Сначала отбираем по типу Издания*/
 	const filteredGameByType = items.filter((item) => item.gameType == type);
@@ -13,7 +13,7 @@ export const getAvailableGamePlatforms = (
 		name: item.name,
 		value: item.value,
 		disabled: !filteredGameByType.some(
-			(game) => Number(game.platformType) == Number(item.value)
+			(game) => Number(game.gamePlatform) == Number(item.value),
 		),
 	}));
 };

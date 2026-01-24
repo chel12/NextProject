@@ -4,7 +4,7 @@ import { cn } from '@/shared/lib/utils';
 import { Search } from 'lucide-react';
 import { useClickAway, useDebounce } from 'react-use';
 import Link from 'next/link';
-import { Api } from '@/services/api-client';
+import { Api } from '@/shared/services/api-client';
 import { Product } from '@prisma/client';
 
 interface Props {
@@ -30,7 +30,7 @@ export const SearchInput: React.FC<Props> = ({ className }) => {
 			}
 		},
 		400,
-		[searchQuery]
+		[searchQuery],
 	);
 	const onClickItem = () => {
 		setFocused(false);
@@ -48,7 +48,7 @@ export const SearchInput: React.FC<Props> = ({ className }) => {
 				ref={ref}
 				className={cn(
 					'flex rounded-2xl flex-1 justify-between relative h-11 z-30',
-					className
+					className,
 				)}>
 				<Search className="absolute top-1/2 translate-y-[-50%] left-3 h-5 text-gray-400" />
 				<input
@@ -64,7 +64,7 @@ export const SearchInput: React.FC<Props> = ({ className }) => {
 					<div
 						className={cn(
 							'absolute w-full bg-white rounded-xl py-2 top-14 shadow-md transition-all duration-200 invisible opacity-0 z-30',
-							focused && 'visible opacity-100 top-12'
+							focused && 'visible opacity-100 top-12',
 						)}>
 						{products.map((product) => (
 							<Link

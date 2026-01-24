@@ -4,10 +4,11 @@ import {
 	Stories,
 	Title,
 	TopBar,
+	ProductsGroupList,
 } from '@/shared/components/shared';
-import { ProductsGroupList } from '@/shared/components/shared/products-group-list';
-import { findGames, GetSearchParams } from '@/shared/lib/find-games';
+
 import { Suspense } from 'react';
+import { findGames, GetSearchParams } from '@/shared/lib/find-games';
 
 export default async function Home({
 	searchParams,
@@ -43,11 +44,11 @@ export default async function Home({
 									category.products.length > 0 && (
 										<ProductsGroupList
 											key={category.id}
-											categoryId={category.id}
 											title={category.name}
+											categoryId={category.id}
 											items={category.products}
 										/>
-									)
+									),
 							)}
 						</div>
 					</div>

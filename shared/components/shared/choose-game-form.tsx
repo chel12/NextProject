@@ -32,7 +32,7 @@ export const ChooseGameForm: React.FC<Props> = ({
 	loading,
 }) => {
 	const {
-		platformType,
+		gamePlatform,
 		type,
 		selectedIngredients,
 		availableTypes,
@@ -44,10 +44,10 @@ export const ChooseGameForm: React.FC<Props> = ({
 
 	const { textDetails, totalPrice } = getGameDetails(
 		type,
-		platformType,
+		gamePlatform,
 		items,
 		ingredients,
-		selectedIngredients
+		selectedIngredients,
 	);
 	const handleClickAdd = () => {
 		if (currentItemId) {
@@ -57,14 +57,14 @@ export const ChooseGameForm: React.FC<Props> = ({
 
 	return (
 		<div className={cn(className, 'flex flex-1')}>
-			<GameImage imageUrl={imageUrl} size={platformType} />
+			<GameImage imageUrl={imageUrl} size={gamePlatform} />
 			<div className="w-[490px] bg-[#F7F6F5] p-7">
 				<Title text={name} size="md" className="font-extrabold mb-1" />
 				<p className="text-gray-400">{textDetails}</p>
 				<div className="flex flex-col gap-4 mt-5">
 					<GroupVariants
 						items={availableTypes}
-						value={String(platformType)}
+						value={String(gamePlatform)}
 						onClick={(value) =>
 							setPlatformType(Number(value) as GameEdition)
 						}
@@ -84,7 +84,7 @@ export const ChooseGameForm: React.FC<Props> = ({
 								key={ingredient.id}
 								name={ingredient.name}
 								price={ingredient.price}
-								imageUrl={ingredient.ImageUrl}
+								imageUrl={ingredient.imageUrl}
 								onClick={() => addIngredient(ingredient.id)}
 								active={selectedIngredients.has(ingredient.id)}
 							/>

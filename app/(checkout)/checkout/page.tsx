@@ -1,7 +1,7 @@
 'use client';
-
 import { useForm, FormProvider } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
+
 import { useCart } from '@/shared/hooks';
 import {
 	CheckoutAdressForm,
@@ -20,13 +20,13 @@ import { createOrder } from '@/app/actions';
 import toast from 'react-hot-toast';
 import React from 'react';
 import { useSession } from 'next-auth/react';
-import { Api } from '@/services/api-client';
+import { Api } from '@/shared/services/api-client';
 
 export default function CheckoutPage() {
-	const { data: session } = useSession();
 	const [submitting, setSubmitting] = React.useState(false);
 	const { items, removeCartItem, totalAmount, updateItemQuantity, loading } =
 		useCart();
+	const { data: session } = useSession();
 
 	const form = useForm<CheckoutFormValues>({
 		resolver: zodResolver(checkoutFormSchema),
@@ -53,7 +53,8 @@ export default function CheckoutPage() {
 		if (session) {
 			fetchUserInfo();
 		}
-	}, [session]);
+	}, [form, session]);
+
 	const onSubmit = async (data: CheckoutFormValues) => {
 		try {
 			setSubmitting(true);
@@ -78,7 +79,7 @@ export default function CheckoutPage() {
 	const onClickCountButton = (
 		id: number,
 		quantity: number,
-		type: 'plus' | 'minus'
+		type: 'plus' | 'minus',
 	) => {
 		const newQuantity = type === 'plus' ? quantity + 1 : quantity - 1;
 		updateItemQuantity(id, newQuantity);

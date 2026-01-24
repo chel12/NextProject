@@ -9,18 +9,18 @@ import {
 
 export const getGameDetails = (
 	type: GameType,
-	platformType: GameEdition,
+	gamePlatform: GameEdition,
 	items: ProductItem[],
 	ingredients: Ingredient[],
-	selectedIngredients: Set<number>
+	selectedIngredients: Set<number>,
 ) => {
 	const totalPrice = calcTotalGamePrices(
 		type,
-		platformType,
+		gamePlatform,
 		items,
 		ingredients,
-		selectedIngredients
+		selectedIngredients,
 	);
-	const textDetails = `Игра ${name} для ${mapGameEdition[platformType]} в издание ${mapGameType[type]}`;
+	const textDetails = `Игра ${name} для ${mapGameEdition[gamePlatform]} в издание ${mapGameType[type]}`;
 	return { totalPrice, textDetails };
 };

@@ -1,8 +1,8 @@
-import { Api } from '@/services/api-client';
+import { Api } from '@/shared/services/api-client';
 import { create } from 'zustand';
 import { getCartDetails } from '../lib';
 import { CartStateItem } from '../lib/get-cart-details';
-import { CreateCartItemValues } from '@/services/dto/cart.dto';
+import { CreateCartItemValues } from '@/shared/services/dto/cart.dto';
 //на zustande
 export interface CartState {
 	loading: boolean;
@@ -54,7 +54,7 @@ export const useCartStore = create<CartState>((set) => ({
 				loading: true,
 				error: false,
 				items: state.items.map((item) =>
-					item.id === id ? { ...item, disabled: true } : item
+					item.id === id ? { ...item, disabled: true } : item,
 				),
 			}));
 			const data = await Api.cart.removeCartItem(id);

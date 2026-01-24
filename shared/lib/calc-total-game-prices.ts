@@ -4,7 +4,7 @@ import { GameEdition, GameType } from '../constants/game';
 /**
  * Функкция для подсчета общей стоимости игры
  * @param type - тип издания выбранной игры
- * @param platformType - тип платформы выбранной игры
+ * @param gamePlatform - тип платформы выбранной игры
  * @param items - список вариаций
  * @param ingredients - список ингредиентов
  * @param selectedIngredients  - выбранные ингредиенты
@@ -13,15 +13,16 @@ import { GameEdition, GameType } from '../constants/game';
  */
 export const calcTotalGamePrices = (
 	type: GameType,
-	platformType: GameEdition,
+	gamePlatform: GameEdition,
 	items: ProductItem[],
 	ingredients: Ingredient[],
-	selectedIngredients: Set<number>
+	selectedIngredients: Set<number>,
 ) => {
 	/*прайс выбранных игр в зависимости от типа и платформы*/
 	const gamePrice =
 		items.find(
-			(item) => item.gameType == type && item.platformType == platformType
+			(item) =>
+				item.gameType == type && item.gamePlatform == gamePlatform,
 		)?.price || 0;
 
 	/*прайс за всё выбранные ингредиенты*/
