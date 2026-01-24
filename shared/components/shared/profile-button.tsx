@@ -65,7 +65,9 @@ export const ProfileButton: React.FC<Props> = ({
 						variant="secondary"
 						className="flex items-center gap-2">
 						<CircleUser size={16} />
-						Профиль
+						{session.user?.name || 'Профиль'}
+						{userRole === 'ADMIN' && '(Админ)'}
+						{userRole === 'MANAGER' && '(Менеджер)'}
 					</Button>
 				</Link>
 			)}

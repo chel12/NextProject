@@ -10,7 +10,6 @@ import { repeatOrder } from '@/app/actions';
 import toast from 'react-hot-toast';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { AdminOrdersPanel } from './admin-orders-panel';
 
 interface ProfileOrdersProps {
 	orders: Order[];
@@ -84,6 +83,8 @@ export const ProfileOrders: React.FC<ProfileOrdersProps> = ({
 	);
 
 	const isAdmin = currentUser?.role === 'ADMIN';
+	const isManager = currentUser?.role === 'MANAGER';
+	const isAdminOrManager = isAdmin || isManager;
 
 	const toggleExpand = (orderId: number) => {
 		setExpandedOrders((prev) => {
@@ -119,9 +120,32 @@ export const ProfileOrders: React.FC<ProfileOrdersProps> = ({
 	if (orders.length === 0) {
 		return (
 			<div>
-				{isAdmin && <AdminOrdersPanel isAdmin={true} />}
-
-				{!isAdmin && (
+				{isAdminOrManager ? (
+					<div className="text-center py-10">
+						<Title
+							text="Добро пожаловать!"
+							size="md"
+							className="font-bold mb-5"
+						/>
+						<p className="text-gray-500 mb-4">
+							Вы вошли как{' '}
+							{isAdmin ? 'администратор' : 'менеджер'}.
+						</p>
+						<p className="text-gray-500 mb-6">
+							Для просмотра заказов и пользователей используйте
+							кнопки в шапке сайта.
+						</p>
+						<Link
+							href={isAdmin ? '/admin/orders' : '/admin/orders'}
+							className="text-primary inline-block">
+							<Button>
+								{isAdmin
+									? 'Перейти к управлению'
+									: 'Перейти к заказам'}
+							</Button>
+						</Link>
+					</div>
+				) : (
 					<>
 						<Title
 							text="Мои заказы"
@@ -144,9 +168,31 @@ export const ProfileOrders: React.FC<ProfileOrdersProps> = ({
 
 	return (
 		<div>
-			{isAdmin && <AdminOrdersPanel isAdmin={true} />}
-
-			{!isAdmin && (
+			{isAdminOrManager ? (
+				<div className="text-center py-10">
+					<Title
+						text="Добро пожаловать!"
+						size="md"
+						className="font-bold mb-5"
+					/>
+					<p className="text-gray-500 mb-4">
+						Вы вошли как {isAdmin ? 'администратор' : 'менеджер'}.
+					</p>
+					<p className="text-gray-500 mb-6">
+						Для просмотра заказов и пользователей используйте кнопки
+						в шапке сайта.
+					</p>
+					<Link
+						href={isAdmin ? '/admin/orders' : '/admin/orders'}
+						className="text-primary inline-block">
+						<Button>
+							{isAdmin
+								? 'Перейти к управлению'
+								: 'Перейти к заказам'}
+						</Button>
+					</Link>
+				</div>
+			) : (
 				<>
 					<Title
 						text="Мои заказы"

@@ -340,7 +340,7 @@ export async function updateOrderStatus(
 			where: { id: Number(currentUser.id) },
 		});
 
-		if (user?.role !== 'ADMIN') {
+		if (user?.role !== 'ADMIN' && user?.role !== 'MANAGER') {
 			throw new Error('Недостаточно прав для изменения статуса заказа');
 		}
 
@@ -353,6 +353,112 @@ export async function updateOrderStatus(
 		return updatedOrder;
 	} catch (error) {
 		console.log('[UpdateOrderStatus] Server error', error);
+		throw error;
+	}
+}
+
+//функция для обновления роли пользователя администратором
+export async function updateUserRole(userId: number, newRole: string) {
+	try {
+		const currentUser = await getUserSession();
+
+		if (!currentUser) {
+			throw new Error('Пользователь не авторизован');
+		}
+
+		// Проверяем, является ли пользователь администратором
+		const user = await prisma.user.findUnique({
+			where: { id: Number(currentUser.id) },
+		});
+
+		if (user?.role !== 'ADMIN') {
+			throw new Error(
+				'Недостаточно прав для изменения роли пользователя',
+			);
+		}
+
+		// Проверяем, что новая роль допустима
+		if (!['USER', 'MANAGER', 'ADMIN'].includes(newRole)) {
+			throw new Error('Недопустимая роль пользователя');
+		}
+
+		// Обновляем роль пользователя
+		// Приводим строку к типу UserRole
+		const validRole = newRole as 'USER' | 'MANAGER' | 'ADMIN';
+
+		const updatedUser = await prisma.user.update({
+			where: { id: userId },
+			data: { role: validRole },
+		});
+
+		return updatedUser;
+	} catch (error) {
+		console.log('[UpdateUserRole] Server error', error);
+		throw error;
+	}
+}
+
+//функция для удаления заказа администратором
+export async function deleteOrder(orderId: number) {
+	try {
+		const currentUser = await getUserSession();
+
+		if (!currentUser) {
+			throw new Error('Пользователь не авторизован');
+		}
+
+		// Проверяем, является ли пользователь администратором
+		const user = await prisma.user.findUnique({
+			where: { id: Number(currentUser.id) },
+		});
+
+		if (user?.role !== 'ADMIN') {
+			throw new Error('Недостаточно прав для удаления заказа');
+		}
+
+		// Удаляем заказ
+		const deletedOrder = await prisma.order.delete({
+			where: { id: orderId },
+		});
+
+		return deletedOrder;
+	} catch (error) {
+		console.log('[DeleteOrder] Server error', error);
+		throw error;
+	}
+}
+
+//функция для удаления пользователя администратором
+export async function deleteUser(userId: number) {
+	try {
+		const currentUser = await getUserSession();
+
+		if (!currentUser) {
+			throw new Error('Пользователь не авторизован');
+		}
+
+		// Проверяем, является ли пользователь администратором
+		const user = await prisma.user.findUnique({
+			where: { id: Number(currentUser.id) },
+		});
+
+		if (user?.role !== 'ADMIN') {
+			throw new Error('Недостаточно прав для удаления пользователя');
+		}
+
+		// Не позволяем удалять самого себя
+		if (Number(currentUser.id) === userId) {
+			throw new Error('Невозможно удалить собственный аккаунт');
+		}
+
+		// Удаляем пользователя
+		const deletedUser = await prisma.user.delete({
+			where: { id: userId },
+		});
+
+		return deletedUser;
+	} catch (error) {
+		console.log('[DeleteUser] Server error', error);
 		throw error;
 	}
 }

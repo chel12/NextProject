@@ -1,6 +1,6 @@
 import { hashSync } from 'bcrypt';
 import { prisma } from './prisma-client';
-import { _ingredients, categories,products } from './constants';
+import { _ingredients, categories, products } from './constants';
 import { Prisma } from '@prisma/client';
 
 const randomNumber = (min: number, max: number) => {
@@ -27,18 +27,39 @@ async function up() {
 	await prisma.user.createMany({
 		data: [
 			{
-				fullName: 'User Test',
+				fullName: 'Manager',
+				email: 'manager@test.ru',
+				password: hashSync('111111', 10),
+				verified: new Date(),
+				role: 'MANAGER',
+			},
+			{
+				fullName: 'Admin',
+				email: 'admin@test.ru',
+				password: hashSync('111111', 10),
+				verified: new Date(),
+				role: 'ADMIN',
+			},
+			{
+				fullName: 'User',
 				email: 'user@test.ru',
 				password: hashSync('111111', 10),
 				verified: new Date(),
 				role: 'USER',
 			},
 			{
-				fullName: 'Admin Admin',
-				email: 'admin@test.ru',
+				fullName: 'Zver',
+				email: 'zver@test.ru',
 				password: hashSync('111111', 10),
 				verified: new Date(),
-				role: 'ADMIN',
+				role: 'USER',
+			},
+			{
+				fullName: 'Baba',
+				email: 'baba@test.ru',
+				password: hashSync('111111', 10),
+				verified: new Date(),
+				role: 'USER',
 			},
 		],
 	});
