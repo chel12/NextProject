@@ -48,6 +48,7 @@ export async function createOrder(data: CheckoutFormValues) {
 		const order = await prisma.order.create({
 			data: {
 				token: cartToken,
+				userId: userCart.user?.id,
 				fullName: data.firstName + ' ' + data.lastName,
 				email: data.email,
 				phone: data.phone,
@@ -96,11 +97,12 @@ export async function createOrder(data: CheckoutFormValues) {
 			},
 			//paymentId id юкассы оплат, индификатор платежа
 			data: {
-				paymendId: paymentData.id,
+				paymentId: paymentData.id,
 			},
 		});
 
-		//*RESEND БИБЛИОТЕКА для теста отправки писем
+		//!RESEND БИБЛИОТЕКА для теста отправки писем
+
 		/* ссылка перенаправления на оплату*/
 		const paymentUrl = paymentData.confirmation.confirmation_url;
 		/* отправка */
@@ -111,7 +113,7 @@ export async function createOrder(data: CheckoutFormValues) {
 				orderId: order.id,
 				totalAmount: order.totalAmount,
 				paymentUrl,
-			})
+			}),
 		);
 
 		return paymentUrl;
@@ -124,21 +126,21 @@ export async function createOrder(data: CheckoutFormValues) {
 export async function updateUserInfo(body: Prisma.UserUpdateInput) {
 	try {
 		//проверка авторизации
-		const currenyUser = await getUserSession();
+		const currentUser = await getUserSession();
 
-		if (!currenyUser) {
+		if (!currentUser) {
 			throw new Error('Пользователь не найден');
 		}
 
 		const findUser = await prisma.user.findFirst({
 			where: {
-				id: Number(currenyUser.id),
+				id: Number(currentUser.id),
 			},
 		});
 
 		await prisma.user.update({
 			where: {
-				id: Number(currenyUser.id),
+				id: Number(currentUser.id),
 			},
 			data: {
 				fullName: body.fullName,
@@ -150,6 +152,127 @@ export async function updateUserInfo(body: Prisma.UserUpdateInput) {
 		});
 	} catch (error) {
 		console.log('Error [UPDATE_USER]', error);
+		throw error;
+	}
+}
+
+//для повтора заказа
+export async function repeatOrder(orderId: number) {
+	try {
+		const cookieStore = cookies();
+		const cartToken = cookieStore.get('cartToken')?.value;
+		console.log('[RepeatOrder] cartToken:', cartToken);
+
+		if (!cartToken) {
+			throw new Error('Cart token not found');
+		}
+
+		// Находим заказ
+		const order = await prisma.order.findUnique({
+			where: { id: orderId },
+		});
+		console.log('[RepeatOrder] order:', order);
+
+		if (!order) {
+			throw new Error('Order not found');
+		}
+
+		// Получаем текущую корзину
+		const cart = await prisma.cart.findFirst({
+			where: { token: cartToken },
+		});
+		console.log('[RepeatOrder] cart:', cart);
+
+		if (!cart) {
+			throw new Error('Cart not found');
+		}
+
+		// Парсим items из заказа
+		const itemsData =
+			typeof order.items === 'string'
+				? JSON.parse(order.items)
+				: order.items || [];
+		const items = Array.isArray(itemsData) ? itemsData : [];
+		console.log('[RepeatOrder] items:', items);
+
+		// Добавляем каждый товар в корзину
+		for (const item of items) {
+			const existingItem = await prisma.cartItem.findFirst({
+				where: {
+					cartId: cart.id,
+					productItemId: item.productItemId,
+				},
+			});
+
+			if (existingItem) {
+				// Обновляем количество
+				await prisma.cartItem.update({
+					where: { id: existingItem.id },
+					data: {
+						quantity: existingItem.quantity + item.quantity,
+					},
+				});
+			} else {
+				// Создаём новый элемент
+				const cartItem = await prisma.cartItem.create({
+					data: {
+						cartId: cart.id,
+						productItemId: item.productItemId,
+						quantity: item.quantity,
+						// Добавляем ингредиенты, если они есть в исходном элементе заказа
+						...(item.ingredients &&
+							Array.isArray(item.ingredients) &&
+							item.ingredients.length > 0 && {
+								ingredients: {
+									connect: item.ingredients.map(
+										(ingredient: any) => ({
+											id: ingredient.id,
+										}),
+									),
+								},
+							}),
+					},
+				});
+			}
+		}
+
+		// Обновляем общую сумму корзины
+		const updatedCart = await prisma.cart.findFirst({
+			where: { id: cart.id },
+			include: {
+				items: {
+					include: {
+						productItem: true,
+						ingredients: true, // Подгружаем ингредиенты
+					},
+				},
+			},
+		});
+
+		if (updatedCart) {
+			const totalAmount = updatedCart.items.reduce(
+				// Получаем цену из ProductItem и ингредиентов
+				(sum, cartItem) => {
+					const productItem = cartItem.productItem;
+					const productPrice = productItem?.price || 0;
+					const ingredientsPrice = cartItem.ingredients.reduce(
+						(ingSum, ingredient) => ingSum + ingredient.price,
+						0,
+					);
+					const totalPricePerItem = productPrice + ingredientsPrice;
+					return sum + totalPricePerItem * cartItem.quantity;
+				},
+				0,
+			);
+			await prisma.cart.update({
+				where: { id: cart.id },
+				data: { totalAmount },
+			});
+		}
+
+		console.log('[RepeatOrder] Success');
+	} catch (error) {
+		console.log('[RepeatOrder] Server error', error);
 		throw error;
 	}
 }
@@ -189,13 +312,153 @@ export async function registerUser(body: Prisma.UserCreateInput) {
 		//отправка письма
 		await sendEmail(
 			createdUser.email,
-			'Next Game | Подтверждение регистрации',
+			'Next Game | 📝 Подтверждение регистрации',
 			VerificationUser({
 				code,
-			})
+			}),
 		);
 	} catch (error) {
 		console.log('Ошибка регистрации', error);
+		throw error;
+	}
+}
+
+//функция для обновления статуса заказа администратором
+export async function updateOrderStatus(
+	orderId: number,
+	newStatus: OrderStatus,
+) {
+	try {
+		const currentUser = await getUserSession();
+
+		if (!currentUser) {
+			throw new Error('Пользователь не авторизован');
+		}
+
+		// Проверяем, является ли пользователь администратором
+		const user = await prisma.user.findUnique({
+			where: { id: Number(currentUser.id) },
+		});
+
+		if (user?.role !== 'ADMIN' && user?.role !== 'MANAGER') {
+			throw new Error('Недостаточно прав для изменения статуса заказа');
+		}
+
+		// Обновляем статус заказа
+		const updatedOrder = await prisma.order.update({
+			where: { id: orderId },
+			data: { status: newStatus },
+		});
+
+		return updatedOrder;
+	} catch (error) {
+		console.log('[UpdateOrderStatus] Server error', error);
+		throw error;
+	}
+}
+
+//функция для обновления роли пользователя администратором
+export async function updateUserRole(userId: number, newRole: string) {
+	try {
+		const currentUser = await getUserSession();
+
+		if (!currentUser) {
+			throw new Error('Пользователь не авторизован');
+		}
+
+		// Проверяем, является ли пользователь администратором
+		const user = await prisma.user.findUnique({
+			where: { id: Number(currentUser.id) },
+		});
+
+		if (user?.role !== 'ADMIN') {
+			throw new Error(
+				'Недостаточно прав для изменения роли пользователя',
+			);
+		}
+
+		// Проверяем, что новая роль допустима
+		if (!['USER', 'MANAGER', 'ADMIN'].includes(newRole)) {
+			throw new Error('Недопустимая роль пользователя');
+		}
+
+		// Обновляем роль пользователя
+		// Приводим строку к типу UserRole
+		const validRole = newRole as 'USER' | 'MANAGER' | 'ADMIN';
+
+		const updatedUser = await prisma.user.update({
+			where: { id: userId },
+			data: { role: validRole },
+		});
+
+		return updatedUser;
+	} catch (error) {
+		console.log('[UpdateUserRole] Server error', error);
+		throw error;
+	}
+}
+
+//функция для удаления заказа администратором
+export async function deleteOrder(orderId: number) {
+	try {
+		const currentUser = await getUserSession();
+
+		if (!currentUser) {
+			throw new Error('Пользователь не авторизован');
+		}
+
+		// Проверяем, является ли пользователь администратором
+		const user = await prisma.user.findUnique({
+			where: { id: Number(currentUser.id) },
+		});
+
+		if (user?.role !== 'ADMIN') {
+			throw new Error('Недостаточно прав для удаления заказа');
+		}
+
+		// Удаляем заказ
+		const deletedOrder = await prisma.order.delete({
+			where: { id: orderId },
+		});
+
+		return deletedOrder;
+	} catch (error) {
+		console.log('[DeleteOrder] Server error', error);
+		throw error;
+	}
+}
+
+//функция для удаления пользователя администратором
+export async function deleteUser(userId: number) {
+	try {
+		const currentUser = await getUserSession();
+
+		if (!currentUser) {
+			throw new Error('Пользователь не авторизован');
+		}
+
+		// Проверяем, является ли пользователь администратором
+		const user = await prisma.user.findUnique({
+			where: { id: Number(currentUser.id) },
+		});
+
+		if (user?.role !== 'ADMIN') {
+			throw new Error('Недостаточно прав для удаления пользователя');
+		}
+
+		// Не позволяем удалять самого себя
+		if (Number(currentUser.id) === userId) {
+			throw new Error('Невозможно удалить собственный аккаунт');
+		}
+
+		// Удаляем пользователя
+		const deletedUser = await prisma.user.delete({
+			where: { id: userId },
+		});
+
+		return deletedUser;
+	} catch (error) {
+		console.log('[DeleteUser] Server error', error);
 		throw error;
 	}
 }

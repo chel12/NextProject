@@ -1,6 +1,6 @@
 'use client';
-import { Api } from '@/services/api-client';
-import { IStory } from '@/services/stories';
+import { Api } from '@/shared/services/api-client';
+import { IStory } from '@/shared/services/stories';
 import React from 'react';
 import { Container } from '.';
 import ReactStories from 'react-insta-stories';

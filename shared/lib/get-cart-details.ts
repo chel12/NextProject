@@ -1,4 +1,4 @@
-import { CartDTO } from '@/services/dto/cart.dto';
+import { CartDTO } from '@/shared/services/dto/cart.dto';
 import { calcCartItemTotalPrice } from '.';
 
 {
@@ -30,7 +30,7 @@ export const getCartDetails = (data: CartDTO): ReturnProps => {
 		name: item.productItem.product.name,
 		imageUrl: item.productItem.product.imageUrl,
 		price: calcCartItemTotalPrice(item),
-		gamePlatform: item.productItem.platformType,
+		gamePlatform: item.productItem.gamePlatform,
 		gameType: item.productItem.gameType,
 		disabled: false,
 		ingredients: item.ingredients.map((ingredient) => ({

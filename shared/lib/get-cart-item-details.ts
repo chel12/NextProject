@@ -1,25 +1,24 @@
-import { Ingredient } from '@prisma/client';
 import { GameEdition, GameType, mapGameType } from '../constants/game';
 import { CartStateItem } from './get-cart-details';
 
 export const getCartItemDetails = (
 	ingredients: CartStateItem['ingredients'],
 	gameType?: GameType,
-	platformType?: GameEdition
+	gamePlatform?: GameEdition,
 ): string => {
 	const details = [];
 	{
 		/* достаём названия и пушим в детейлс*/
 	}
-	if (platformType && gameType) {
+	if (gamePlatform && gameType) {
 		const typeName = mapGameType[gameType];
-		details.push(`Тип носителя ${typeName} для ${platformType}`);
+		details.push(`Тип носителя ${typeName} для ${gamePlatform}`);
 	}
 	if (ingredients) {
 		details.push(
 			...ingredients.map(
-				(ingredient) => `В набор входит: ${ingredient.name}`
-			)
+				(ingredient) => `В набор входит: ${ingredient.name}`,
+			),
 		);
 	}
 	return details.join(', ');

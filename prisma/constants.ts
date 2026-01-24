@@ -24,46 +24,46 @@ export const categories = [
 		name: 'Хоррор',
 	},
 ];
-export const ingredients = [
+export const _ingredients = [
 	{
 		name: 'классическая упаковка',
 		price: 10,
-		ImageUrl: 'https://cdlabs.ru/wp-content/uploads/2016/06/DVD-Box.png',
+		imageUrl: 'https://cdlabs.ru/wp-content/uploads/2016/06/DVD-Box.png',
 	},
 	{
 		name: 'праздничная упаковка',
 		price: 15,
-		ImageUrl:
+		imageUrl:
 			'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSmNXodlCKSqSLPMswykd4skmK80VZ3Ina4RQ&s',
 	},
 	{
 		name: 'прозрачная упаковка',
 		price: 15,
-		ImageUrl:
+		imageUrl:
 			'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTX8TGO1f94IvBNcBK_-K7YiVEqBc_4J3xwVw&s',
 	},
 	{
 		name: 'кастомная упаковка',
 		price: 100,
-		ImageUrl:
+		imageUrl:
 			'https://img.freepik.com/free-psd/christmas-gift-isolated_23-2151250408.jpg',
 	},
 	{
 		name: 'необычная упаковка',
 		price: 6,
-		ImageUrl:
+		imageUrl:
 			'https://img.freepik.com/free-psd/christmas-gift-isolated_23-2151250408.jpg',
 	},
 	{
 		name: 'новогодняя упаковка',
 		price: 4,
-		ImageUrl:
+		imageUrl:
 			'https://img.freepik.com/free-psd/christmas-gift-isolated_23-2151250408.jpg',
 	},
 	{
 		name: 'хеллуинская упаковка',
 		price: 5,
-		ImageUrl:
+		imageUrl:
 			'https://img.freepik.com/free-psd/christmas-gift-isolated_23-2151250408.jpg',
 	},
 ].map((obj, index) => ({ id: index + 1, ...obj }));

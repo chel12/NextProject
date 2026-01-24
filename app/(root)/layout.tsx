@@ -4,7 +4,7 @@ import { Suspense } from 'react';
 
 export const metadata: Metadata = {
 	title: 'Next Game | Главная',
-	description: 'Интернет магазин на тему компьютерных игр',
+	description: 'Интернет магазин компьютерных и консольных игр',
 };
 
 export default function HomeLayout({

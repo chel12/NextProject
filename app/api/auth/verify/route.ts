@@ -5,11 +5,12 @@ export const dynamic = 'force-dynamic';
 export async function GET(req: NextRequest) {
 	try {
 		const code = req.nextUrl.searchParams.get('code');
+		// const code = '';
 
 		if (!code) {
 			return NextResponse.json(
 				{ error: 'Код неверный' },
-				{ status: 400 }
+				{ status: 400 },
 			);
 		}
 
@@ -22,7 +23,7 @@ export async function GET(req: NextRequest) {
 		if (!verificationCode) {
 			return NextResponse.json(
 				{ error: 'Код неверный' },
-				{ status: 400 }
+				{ status: 400 },
 			);
 		}
 

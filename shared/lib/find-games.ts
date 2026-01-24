@@ -35,11 +35,11 @@ export const findGames = async (params: GetSearchParams) => {
 										in: ingredientsIdArr,
 									},
 								},
-						  }
+							}
 						: undefined,
 					items: {
 						some: {
-							platformType: {
+							gamePlatform: {
 								in: platforms,
 							},
 							gameType: {

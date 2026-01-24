@@ -1,6 +1,6 @@
 import { hashSync } from 'bcrypt';
 import { prisma } from './prisma-client';
-import { categories, ingredients, products } from './constants';
+import { _ingredients, categories, products } from './constants';
 import { Prisma } from '@prisma/client';
 
 const randomNumber = (min: number, max: number) => {
@@ -9,17 +9,17 @@ const randomNumber = (min: number, max: number) => {
 const generateProductItem = ({
 	productId,
 	gameType,
-	platformType,
+	gamePlatform,
 }: {
 	productId: number;
 	gameType?: 1 | 2;
-	platformType?: 1 | 2 | 3;
+	gamePlatform?: 1 | 2 | 3;
 }) => {
 	return {
 		productId,
 		price: randomNumber(100, 1000),
 		gameType,
-		platformType,
+		gamePlatform,
 	} as Prisma.ProductItemUncheckedCreateInput;
 };
 
@@ -27,18 +27,39 @@ async function up() {
 	await prisma.user.createMany({
 		data: [
 			{
-				fullName: 'User Test',
+				fullName: 'Manager',
+				email: 'manager@test.ru',
+				password: hashSync('111111', 10),
+				verified: new Date(),
+				role: 'MANAGER',
+			},
+			{
+				fullName: 'Admin',
+				email: 'admin@test.ru',
+				password: hashSync('111111', 10),
+				verified: new Date(),
+				role: 'ADMIN',
+			},
+			{
+				fullName: 'User',
 				email: 'user@test.ru',
 				password: hashSync('111111', 10),
 				verified: new Date(),
 				role: 'USER',
 			},
 			{
-				fullName: 'Admin Admin',
-				email: 'admin@test.ru',
+				fullName: 'Zver',
+				email: 'zver@test.ru',
 				password: hashSync('111111', 10),
 				verified: new Date(),
-				role: 'ADMIN',
+				role: 'USER',
+			},
+			{
+				fullName: 'Baba',
+				email: 'baba@test.ru',
+				password: hashSync('111111', 10),
+				verified: new Date(),
+				role: 'USER',
 			},
 		],
 	});
@@ -46,7 +67,7 @@ async function up() {
 		data: categories,
 	});
 	await prisma.ingredient.createMany({
-		data: ingredients,
+		data: _ingredients,
 	});
 	await prisma.product.createMany({
 		data: products,
@@ -58,7 +79,7 @@ async function up() {
 				'https://gaming-cdn.com/images/products/1620/orig/call-of-duty-4-modern-warfare-pc-mac-game-steam-cover.jpg?v=1701179820',
 			categoryId: 1,
 			ingredients: {
-				connect: ingredients.slice(0, 6),
+				connect: _ingredients.slice(0, 6),
 			},
 		},
 	});
@@ -69,7 +90,7 @@ async function up() {
 				'https://cdn.kanobu.ru/games/72/25478a08b5414e78a1cb4764e959004d',
 			categoryId: 2,
 			ingredients: {
-				connect: ingredients.slice(0, 7),
+				connect: _ingredients.slice(0, 7),
 			},
 		},
 	});
@@ -80,7 +101,7 @@ async function up() {
 				'https://cdn.kanobu.ru/games/31/f19e86587b7f4341a77839717de01841',
 			categoryId: 2,
 			ingredients: {
-				connect: ingredients.slice(0, 8),
+				connect: _ingredients.slice(0, 8),
 			},
 		},
 	});
@@ -90,59 +111,59 @@ async function up() {
 			generateProductItem({
 				productId: game1.id,
 				gameType: 1,
-				platformType: 1,
+				gamePlatform: 1,
 			}),
 			generateProductItem({
 				productId: game1.id,
 				gameType: 2,
-				platformType: 3,
+				gamePlatform: 3,
 			}),
 			//game 2
 			generateProductItem({
 				productId: game2.id,
 				gameType: 1,
-				platformType: 1,
+				gamePlatform: 1,
 			}),
 			generateProductItem({
 				productId: game2.id,
 				gameType: 1,
-				platformType: 2,
+				gamePlatform: 2,
 			}),
 			generateProductItem({
 				productId: game2.id,
 				gameType: 1,
-				platformType: 3,
+				gamePlatform: 3,
 			}),
 			generateProductItem({
 				productId: game2.id,
 				gameType: 2,
-				platformType: 1,
+				gamePlatform: 1,
 			}),
 			generateProductItem({
 				productId: game2.id,
 				gameType: 2,
-				platformType: 2,
+				gamePlatform: 2,
 			}),
 			generateProductItem({
 				productId: game2.id,
 				gameType: 2,
-				platformType: 3,
+				gamePlatform: 3,
 			}),
 			//game 3
 			generateProductItem({
 				productId: game3.id,
 				gameType: 1,
-				platformType: 1,
+				gamePlatform: 1,
 			}),
 			generateProductItem({
 				productId: game3.id,
 				gameType: 2,
-				platformType: 1,
+				gamePlatform: 1,
 			}),
 			generateProductItem({
 				productId: game3.id,
 				gameType: 2,
-				platformType: 2,
+				gamePlatform: 2,
 			}),
 			//остальные игры
 			generateProductItem({ productId: 1 }),

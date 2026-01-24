@@ -19,9 +19,9 @@ export interface Filters {
 }
 interface ReturnProps extends Filters {
 	setPrices: (name: keyof PriceProps, value: number) => void;
-	setGameType: (key: string) => void;
-	setPlatform: (key: string) => void;
-	setIngredients: (key: string) => void;
+	setGameType: (value: string) => void;
+	setPlatform: (value: string) => void;
+	setIngredients: (value: string) => void;
 }
 
 export const useFilters = (): ReturnProps => {
@@ -74,6 +74,6 @@ export const useFilters = (): ReturnProps => {
 			setPlatform: togglePlatform,
 			setIngredients: toggleIngredients,
 		}),
-		[platforms, gameTypes, prices, selectedIngredients]
+		[platforms, gameTypes, prices, selectedIngredients, toggleGameType, togglePlatform, toggleIngredients]
 	);
 };

@@ -1,7 +1,9 @@
-import React from 'react';
-import { useSession, signIn } from 'next-auth/react';
+'use client';
+
+import React, { useEffect, useState } from 'react';
+import { useSession } from 'next-auth/react';
 import { Button } from '..';
-import { CircleUser, SquareUser } from 'lucide-react';
+import { CircleUser, SquareUser, Package } from 'lucide-react';
 import Link from 'next/link';
 
 interface Props {
@@ -9,11 +11,44 @@ interface Props {
 	className?: string;
 }
 
+interface UserWithRole {
+	id: number;
+	role: string;
+}
+
 export const ProfileButton: React.FC<Props> = ({
 	className,
 	onClickSignIn,
 }) => {
 	const { data: session } = useSession();
+	const [userRole, setUserRole] = useState<string | null>(null);
+
+	useEffect(() => {
+		const fetchUserRole = async () => {
+			if (session?.user?.id) {
+				try {
+					const response = await fetch(
+						`/api/users?id=${session.user.id}`,
+					);
+					if (response.ok) {
+						const userData: UserWithRole = await response.json();
+						setUserRole(userData.role);
+					}
+				} catch (error) {
+					console.error('Error fetching user role:', error);
+				}
+			}
+		};
+
+		if (session) {
+			fetchUserRole();
+		} else {
+			setUserRole(null);
+		}
+	}, [session]);
+
+	const isAdmin = userRole === 'ADMIN';
+
 	return (
 		<div className={className}>
 			{!session ? (
@@ -30,7 +65,9 @@ export const ProfileButton: React.FC<Props> = ({
 						variant="secondary"
 						className="flex items-center gap-2">
 						<CircleUser size={16} />
-						Профиль
+						{session.user?.name || 'Профиль'}
+						{userRole === 'ADMIN' && '(Админ)'}
+						{userRole === 'MANAGER' && '(Менеджер)'}
 					</Button>
 				</Link>
 			)}

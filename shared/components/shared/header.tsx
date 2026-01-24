@@ -1,15 +1,16 @@
 'use client';
 import { cn } from '@/shared/lib/utils';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Container } from './container';
 import Image from 'next/image';
 import Link from 'next/link';
 import { SearchInput } from './search-input';
 import { AuthModal, CartButton, ProfileButton } from '.';
+import { Button } from '../ui';
 import { useRouter, useSearchParams } from 'next/navigation';
 import toast from 'react-hot-toast';
-import { useSession, signIn } from 'next-auth/react';
-import { set } from 'react-hook-form';
+import { useSession } from 'next-auth/react';
+import { Package, Users } from 'lucide-react';
 
 interface Props {
 	hasSearch?: boolean;
@@ -24,7 +25,33 @@ export const Header: React.FC<Props> = ({
 }) => {
 	const router = useRouter();
 	const [openAuthModal, setOpenAuthModal] = React.useState(false);
+	const [userRole, setUserRole] = React.useState<string | null>(null);
+	const { data: session } = useSession();
 	const searchParams = useSearchParams();
+
+	React.useEffect(() => {
+		const fetchUserRole = async () => {
+			if (session?.user?.id) {
+				try {
+					const response = await fetch(
+						`/api/users?id=${session.user.id}`,
+					);
+					if (response.ok) {
+						const userData = await response.json();
+						setUserRole(userData.role);
+					}
+				} catch (error) {
+					console.error('Error fetching user role:', error);
+				}
+			}
+		};
+
+		if (session) {
+			fetchUserRole();
+		} else {
+			setUserRole(null);
+		}
+	}, [session]);
 
 	React.useEffect(() => {
 		let toastMessage = '';
@@ -81,10 +108,42 @@ export const Header: React.FC<Props> = ({
 						open={openAuthModal}
 						onCLose={() => setOpenAuthModal(false)}
 					/>
+					{userRole === 'ADMIN' && (
+						<>
+							<Link href="/admin/orders">
+								<Button
+									variant="outline"
+									className="flex items-center gap-2">
+									<Package size={16} />
+									Заказы
+								</Button>
+							</Link>
+							<Link href="/admin/users">
+								<Button
+									variant="outline"
+									className="flex items-center gap-2">
+									<Users size={16} />
+									Пользователи
+								</Button>
+							</Link>
+						</>
+					)}
+					{userRole === 'MANAGER' && (
+						<Link href="/admin/orders">
+							<Button
+								variant="outline"
+								className="flex items-center gap-2">
+								<Package size={16} />
+								Заказы
+							</Button>
+						</Link>
+					)}
 					<ProfileButton
 						onClickSignIn={() => setOpenAuthModal(true)}
 					/>
-					{hasCart && <CartButton />}
+					{hasCart &&
+						userRole !== 'ADMIN' &&
+						userRole !== 'MANAGER' && <CartButton />}
 				</div>
 			</Container>
 		</header>

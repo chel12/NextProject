@@ -1,5 +1,5 @@
 import { prisma } from '@/prisma/prisma-client';
-import { ProfileForm } from '@/shared/components';
+import { ProfileForm, ProfileOrders, Container } from '@/shared/components';
 import { getUserSession } from '@/shared/lib/get-user-session';
 import { redirect } from 'next/navigation';
 
@@ -17,5 +17,25 @@ export default async function ProfilePage() {
 
 	if (!user) return redirect('/not-auth');
 
-	return <ProfileForm data={user} />;
+	const orders = await prisma.order.findMany({
+		where: { userId: user.id },
+		orderBy: { createdAt: 'desc' },
+	});
+
+	return (
+		<Container className="my-10">
+			<h1 className="text-3xl font-bold mb-8">Мой профиль</h1>
+			<div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+				<div>
+					<ProfileForm data={user} />
+				</div>
+				<div>
+					<ProfileOrders
+						orders={orders}
+						currentUser={{ id: user.id, role: user.role }}
+					/>
+				</div>
+			</div>
+		</Container>
+	);
 }
