@@ -28,7 +28,7 @@ export default async function Home({
 
 			<Stories />
 
-			<Container className="mt-10 pb-14">
+			<Container className="mt-10 pb-40">
 				<div className="flex gap-[80px]">
 					{/*Филтьтрация*/}
 					<div className="w-[250px]">
