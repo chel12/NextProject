@@ -15,8 +15,6 @@ export const CheckoutSidebar: React.FC<Props> = ({
 	loading,
 	className,
 }) => {
-	const DELIVERY_PRICE = Math.floor(totalAmount * 0.25);
-	const VAT = Math.floor(totalAmount * 0.13);
 	return (
 		<WhiteBlock className={cn('p-6 sticky top-4', className)}>
 			<div className="flex flex-col gap-1">
@@ -25,7 +23,7 @@ export const CheckoutSidebar: React.FC<Props> = ({
 					<Skeleton className=" h-11 w-48" />
 				) : (
 					<span className=" h-11 text-[34px] font-extrabold">
-						{totalAmount + VAT + DELIVERY_PRICE} Р.
+						{totalAmount} Р.
 					</span>
 				)}
 			</div>
@@ -41,36 +39,6 @@ export const CheckoutSidebar: React.FC<Props> = ({
 						<Skeleton className="h-6 w-14 rounded-[6px]" />
 					) : (
 						`${totalAmount} Руб.`
-					)
-				}
-			/>
-			<CheckoutItemDetails
-				title={
-					<div className="flex items-center">
-						<Percent size={18} className="mr-2" />
-						Налоги
-					</div>
-				}
-				value={
-					loading ? (
-						<Skeleton className="h-6 w-14 rounded-[6px]" />
-					) : (
-						`${VAT} Руб.`
-					)
-				}
-			/>
-			<CheckoutItemDetails
-				title={
-					<div className="flex items-center">
-						<Truck size={18} className="mr-2" />
-						Доставка
-					</div>
-				}
-				value={
-					loading ? (
-						<Skeleton className="h-6 w-14 rounded-[6px]" />
-					) : (
-						`${DELIVERY_PRICE} Руб.`
 					)
 				}
 			/>

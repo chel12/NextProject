@@ -42,12 +42,16 @@ export default function CheckoutPage() {
 
 	React.useEffect(() => {
 		async function fetchUserInfo() {
-			const data = await Api.auth.getMe();
-			const [firstName, lastName] = data.fullName.split(' ');
+			try {
+				const data = await Api.auth.getMe();
+				const [firstName, lastName] = data.fullName.split(' ');
 
-			form.setValue('email', data.email);
-			form.setValue('firstName', firstName);
-			form.setValue('lastName', lastName);
+				form.setValue('email', data.email);
+				form.setValue('firstName', firstName);
+				form.setValue('lastName', lastName);
+			} catch (error) {
+				console.error('Ошибка получения данных пользователя:', error);
+			}
 		}
 
 		if (session) {
