@@ -214,7 +214,7 @@ export async function repeatOrder(orderId: number) {
 				});
 			} else {
 				// Создаём новый элемент
-				const cartItem = await prisma.cartItem.create({
+				await prisma.cartItem.create({
 					data: {
 						cartId: cart.id,
 						productItemId: item.productItemId,
@@ -225,7 +225,7 @@ export async function repeatOrder(orderId: number) {
 							item.ingredients.length > 0 && {
 								ingredients: {
 									connect: item.ingredients.map(
-										(ingredient: any) => ({
+										(ingredient: { id: number }) => ({
 											id: ingredient.id,
 										}),
 									),
