@@ -56,9 +56,13 @@ export const ChooseGameForm: React.FC<Props> = ({
 	};
 
 	return (
-		<div className={cn(className, 'flex flex-1')}>
+		<div
+			className={cn(
+				className,
+				'flex flex-col items-center overflow-y-auto max-h-screen lg:max-h-none',
+			)}>
 			<GameImage imageUrl={imageUrl} size={gamePlatform} />
-			<div className="w-[490px] bg-[#F7F6F5] p-7">
+			<div className="w-full max-w-[490px] bg-[#F7F6F5] p-4 lg:p-7 rounded-xl">
 				<Title text={name} size="md" className="font-extrabold mb-1" />
 				<p className="text-gray-400">{textDetails}</p>
 				<div className="flex flex-col gap-4 mt-5">
@@ -77,8 +81,8 @@ export const ChooseGameForm: React.FC<Props> = ({
 				</div>
 				{/*div для скролла в ингредиентах(scrollbar кастом класс из
 				global css)*/}
-				<div className="bg-gray-50 p-5 rounded-md h-[420px] overflow-auto scrollbar mt-5">
-					<div className="grid grid-cols-3 gap-3">
+				<div className="bg-gray-50 p-4 rounded-md h-[300px] sm:h-[420px] overflow-auto scrollbar mt-5">
+					<div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
 						{ingredients.map((ingredient) => (
 							<IngredientItem
 								key={ingredient.id}
@@ -94,7 +98,7 @@ export const ChooseGameForm: React.FC<Props> = ({
 				<Button
 					loading={loading}
 					onClick={handleClickAdd}
-					className="h-[55px] px-10 text-base rounded-[18px] w-full mt-10">
+					className="h-[55px] px-10 text-base rounded-[18px] w-full mt-5 lg:mt-10">
 					Добавить в корзину за {totalPrice}Р
 				</Button>
 			</div>

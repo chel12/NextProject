@@ -12,10 +12,10 @@ export const TopBar: React.FC<Props> = ({ categories, className }) => {
 	return (
 		<div
 			className={cn(
-				'sticky top-0 bg-white py-5 shadow-lg shadow-black/5 z-10',
-				className
+				'sticky top-0 bg-white py-3 sm:py-5 shadow-lg shadow-black/5 z-10 overflow-x-auto -mx-4 sm:mx-0',
+				className,
 			)}>
-			<Container className="flex items-center justify-between">
+			<Container className="flex items-center justify-between w-full sm:w-auto">
 				<Categories items={categories} />
 				<SortPopup />
 			</Container>

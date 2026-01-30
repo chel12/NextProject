@@ -74,21 +74,22 @@ export const Header: React.FC<Props> = ({
 
 	return (
 		<header className={cn(' border-b', className)}>
-			<Container className="flex items-center justify-between py-8">
+			<Container className="flex items-center justify-between py-4 sm:py-8">
 				{/* левая часть*/}
 				<Link href="/">
-					<div className="flex flex-center gap-4">
+					<div className="flex flex-center gap-2 sm:gap-4">
 						<Image
 							src="/logo.jpg"
 							alt="Logo"
 							width={35}
 							height={35}
+							className="w-8 h-8 sm:w-[35px] sm:h-[35px]"
 						/>
-						<div>
-							<h1 className="text-2xl uppercase font-black">
+						<div className="hidden md:block">
+							<h1 className="text-lg sm:text-2xl uppercase font-black">
 								Next GameShop
 							</h1>
-							<p className="text-sm text-gray-400 leading-3">
+							<p className="hidden sm:block text-sm text-gray-400 leading-3">
 								игры на любой вкус
 							</p>
 						</div>
@@ -97,7 +98,7 @@ export const Header: React.FC<Props> = ({
 
 				{/* ПОИСК*/}
 				{hasSearch && (
-					<div className="mx-10 flex-1">
+					<div className="hidden sm:block mx-4 lg:mx-10 flex-1">
 						<SearchInput />
 					</div>
 				)}

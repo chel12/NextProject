@@ -1,6 +1,6 @@
 import React from 'react';
 import { CheckoutItemDetails, WhiteBlock } from '.';
-import { ArrowRight, Package, Percent, Truck } from 'lucide-react';
+import { ArrowRight, Package} from 'lucide-react';
 import { Button, Skeleton } from '../ui';
 import { cn } from '@/shared/lib/utils';
 
@@ -16,13 +16,13 @@ export const CheckoutSidebar: React.FC<Props> = ({
 	className,
 }) => {
 	return (
-		<WhiteBlock className={cn('p-6 sticky top-4', className)}>
+		<WhiteBlock className={cn('p-4 sm:p-6 sticky top-4', className)}>
 			<div className="flex flex-col gap-1">
-				<span className="text-xl">Итого: </span>
+				<span className="text-base sm:text-xl">Итого: </span>
 				{loading ? (
-					<Skeleton className=" h-11 w-48" />
+					<Skeleton className="h-8 sm:h-11 w-32 sm:w-48" />
 				) : (
-					<span className=" h-11 text-[34px] font-extrabold">
+					<span className="h-8 sm:h-11 text-2xl sm:text-[34px] font-extrabold">
 						{totalAmount} Р.
 					</span>
 				)}

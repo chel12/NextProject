@@ -89,16 +89,16 @@ export default function CheckoutPage() {
 		updateItemQuantity(id, newQuantity);
 	};
 	return (
-		<Container className="mt-8">
+		<Container className="mt-4 sm:mt-8">
 			<Title
-				className=" font-extrabold mb-8 text-[36px]"
+				className=" font-extrabold mb-4 sm:mb-8 text-2xl sm:text-[36px]"
 				text="Оформление заказа"
 			/>
 			<FormProvider {...form}>
 				<form onSubmit={form.handleSubmit(onSubmit)}>
-					<div className="flex gap-10">
+					<div className="flex flex-col lg:flex-row gap-5 lg:gap-10">
 						{/* левый блок*/}
-						<div className="flex flex-col gap-10 flex-1 mb-20">
+						<div className="flex flex-col gap-5 lg:gap-10 flex-1 mb-10 lg:mb-20">
 							<CheckoutCart
 								onClickCountButton={onClickCountButton}
 								removeCartItem={removeCartItem}
@@ -117,7 +117,7 @@ export default function CheckoutPage() {
 							/>
 						</div>
 						{/* правый блок*/}
-						<div className="w-[450px]">
+						<div className="w-full lg:w-[450px] mt-5 lg:mt-0 order-first lg:order-last">
 							<CheckoutSidebar
 								totalAmount={totalAmount}
 								loading={loading || submitting}

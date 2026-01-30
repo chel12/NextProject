@@ -27,8 +27,8 @@ export default async function ProductPage({
 	if (!product) return notFound();
 
 	return (
-		<Container className="flex flex-col my-10">
-			<ProductForm product={product}  />
+		<Container className="flex flex-col items-center my-10">
+			<ProductForm product={product} />
 		</Container>
 	);
 }

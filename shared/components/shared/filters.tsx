@@ -22,16 +22,20 @@ export const Filters: React.FC<Props> = ({ className }) => {
 	};
 	return (
 		<div className={className}>
-			<Title text="Фильтрация" size="sm" className="mb-5 font-bold" />
+			<Title
+				text="Фильтрация"
+				size="sm"
+				className="mb-4 sm:mb-5 font-bold"
+			/>
 			{/*Верхние чекбоксы*/}
-			<div className="flex flex-col gap-4">
+			<div className="flex flex-col gap-3 sm:gap-4">
 				{/* <FilterCheckbox name="onebox" text="можно собрать" value="1" />
 				<FilterCheckbox name="twobox" text="Новинки" value="2" /> */}
 			</div>
 			<CheckboxFiltersGroup
 				name="Платформы"
 				title="Платформы"
-				className="mb-5"
+				className="mb-4 sm:mb-5"
 				onClickCheckbox={filters.setPlatform}
 				selected={filters.platforms}
 				items={[
@@ -43,7 +47,7 @@ export const Filters: React.FC<Props> = ({ className }) => {
 			<CheckboxFiltersGroup
 				title="Издания"
 				name="Издания"
-				className="mb-5"
+				className="mb-4 sm:mb-5"
 				onClickCheckbox={filters.setGameType}
 				selected={filters.gameTypes}
 				items={[
@@ -52,9 +56,11 @@ export const Filters: React.FC<Props> = ({ className }) => {
 				]}
 			/>
 			{/*Фильтр цен*/}
-			<div className="mt-5 border-y border-y-neutral-100 py-6 pb-7">
-				<p className="font-bold mb-3">Цена от и до:</p>
-				<div className="flex gap-3 mb-5">
+			<div className="mt-4 sm:mt-5 border-y border-y-neutral-100 py-4 sm:py-6 pb-5 sm:pb-7">
+				<p className="font-bold mb-2 sm:mb-3 text-sm sm:text-base">
+					Цена от и до:
+				</p>
+				<div className="flex gap-2 sm:gap-3 mb-3 sm:mb-5">
 					<Input
 						type="number"
 						placeholder="0"
@@ -64,7 +70,7 @@ export const Filters: React.FC<Props> = ({ className }) => {
 						onChange={(e) =>
 							filters.setPrices(
 								'priceFrom',
-								Number(e.target.value)
+								Number(e.target.value),
 							)
 						}
 					/>
@@ -94,7 +100,7 @@ export const Filters: React.FC<Props> = ({ className }) => {
 			<CheckboxFiltersGroup
 				name="Упаковки"
 				title="Упаковки"
-				className="mt-5"
+				className="mt-4 sm:mt-5"
 				limit={4}
 				defaultItems={items.slice(0, 4)}
 				items={items}
