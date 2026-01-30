@@ -39,7 +39,11 @@ export const ProductsGroupList: React.FC<Props> = ({
 			id={`category-${categoryId}`}
 			ref={intersectionRef}>
 			<Title text={title} size="lg" className="font-extrabold mb-5" />
-			<div className={cn('grid grid-cols-3 gap-[50px]', listClassName)}>
+			<div
+				className={cn(
+					'grid grid-cols-3 gap-[30px] items-stretch auto-rows-fr',
+					listClassName,
+				)}>
 				{items.map((product) => (
 					<ProductCard
 						key={product.id}
@@ -48,6 +52,7 @@ export const ProductsGroupList: React.FC<Props> = ({
 						imageUrl={product.imageUrl}
 						price={product.items[0].price}
 						ingredients={product.ingredients}
+						className="h-[450px]"
 					/>
 				))}
 			</div>

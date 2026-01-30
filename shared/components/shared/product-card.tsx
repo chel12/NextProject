@@ -4,6 +4,7 @@ import { Title } from '.';
 import { Button } from '../ui';
 import { Plus } from 'lucide-react';
 import { Ingredient } from '@prisma/client';
+import { cn } from '@/shared/lib/utils';
 
 interface Props {
 	id: number;
@@ -23,23 +24,29 @@ export const ProductCard: React.FC<Props> = ({
 	className,
 }) => {
 	return (
-		<div className={className}>
-			<Link href={`/product/${id}`}>
-				<div className="flex justify-center p-6 bg-secondary rounded-lg h-[280px]">
+		<div
+			className={cn(
+				className,
+				'h-full flex flex-col w-full max-w-[300px]',
+			)}>
+			<Link
+				href={`/product/${id}`}
+				className="block h-full flex flex-col w-full">
+				<div className="flex justify-center p-6 bg-secondary rounded-lg h-[240px] flex-shrink-0">
 					<img
-						className="w-[200px] h-[230px]  rounded-[20px]"
+						className="w-[180px] h-[200px] rounded-[20px]"
 						src={imageUrl}
 						alt={name}
 					/>
 				</div>
 				<Title text={name} size="sm" className="mb-1 mt-3 font-bold" />
-				<p className="text-sm text-gray-400">
+				<p className="text-sm text-gray-400 min-h-[40px] line-clamp-2 overflow-hidden">
 					{ingredients
 						.map((ingredient) => ingredient.name)
 						.join(', ')}
 				</p>
 
-				<div className="flex justify-between items-center mt-4">
+				<div className="flex justify-between items-center mt-auto pt-4">
 					<span className="text-[20px]">
 						от <b>{price} Р</b>
 					</span>

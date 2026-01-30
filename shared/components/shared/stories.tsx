@@ -32,30 +32,30 @@ export const Stories: React.FC = () => {
 	return (
 		<>
 			<Container
-				className={cn('flex items-center justify-between gap-2 my-10')}>
+				className={cn('flex items-center justify-between gap-1 my-10')}>
 				{stories.length === 0 &&
 					[...Array(6)].map((_, index) => (
 						<div
 							key={index}
-							className="w-[200px] h-[250px] bg-gray-200 rounded-md animate-pulse"></div>
+							className="w-[120px] h-[120px] bg-gray-200 rounded-full animate-pulse"></div>
 					))}
 				{stories.map((story) => (
 					<div
 						key={story.id}
-						className="flex justify-center p-3 bg-secondary rounded-lg h-[260px]">
+						className="flex justify-center p-2 bg-secondary rounded-full h-[150px] w-[150px]">
 						<img
 							key={story.id}
 							onClick={() => onClickStory(story)}
-							className="rounded-md cursor-pointer"
-							height={250}
-							width={200}
+							className="rounded-full cursor-pointer object-cover"
+							height={150}
+							width={150}
 							src={story.previewImageUrl}
 							alt="stories"
 						/>
 					</div>
 				))}
 				{open && (
-					<div className="absolute left-0 top-0 w-full h-full bg-black/80 flex items-center justify-center z-20">
+					<div className="absolute left-0 top-0 w-full h-full bg-black/80 flex items-center justify-center z-30">
 						<div className="relative" style={{ width: 520 }}>
 							<button
 								className="absolute -right-10 -top-5 z-30"
