@@ -174,6 +174,9 @@ async function up() {
 			generateProductItem({ productId: 6 }),
 			generateProductItem({ productId: 7 }),
 			generateProductItem({ productId: 8 }),
+			generateProductItem({ productId: 9 }),
+			generateProductItem({ productId: 10 }),
+			generateProductItem({ productId: 11 }),
 		],
 	});
 	await prisma.cart.createMany({
@@ -231,52 +234,52 @@ async function up() {
 	await prisma.storyItem.createMany({
 		data: [
 			{
-				storyId: 13,
+				storyId: 1,
 				sourceUrl:
 					'https://i.pinimg.com/736x/ff/8e/65/ff8e65f546e61bc74615aacd5900af02.jpg',
 			},
 			{
-				storyId: 13,
+				storyId: 1,
 				sourceUrl:
 					'https://i.pinimg.com/736x/2c/23/d8/2c23d8218ea74f186de222789f0b0cc7.jpg',
 			},
 			{
-				storyId: 13,
+				storyId: 1,
 				sourceUrl:
 					'https://i.pinimg.com/736x/ca/46/74/ca46747fd528ccb8adeca640c6f1b781.jpg',
 			},
 			{
-				storyId: 13,
+				storyId: 2,
 				sourceUrl:
 					'https://i.pinimg.com/736x/03/7b/86/037b86e2b899e7ce4f0371e88be3ce1f.jpg',
 			},
 			{
-				storyId: 13,
+				storyId: 6,
 				sourceUrl:
 					'https://i.pinimg.com/736x/ed/c7/22/edc722cfb954c5929d5f92b661ca3ebc.jpg',
 			},
 			{
-				storyId: 14,
+				storyId: 2,
 				sourceUrl:
 					'https://i.pinimg.com/736x/b7/d7/e8/b7d7e8ec68d5f6d82e50af7245ded879.jpg',
 			},
 			{
-				storyId: 14,
+				storyId: 3,
 				sourceUrl:
 					'https://i.pinimg.com/736x/a8/f2/0f/a8f20ffede2052b7fc5a5e462de1507e.jpg',
 			},
 			{
-				storyId: 14,
+				storyId: 3,
 				sourceUrl:
 					'https://i.pinimg.com/736x/a4/39/88/a4398802beb32e5f287f04620344e47d.jpg',
 			},
 			{
-				storyId: 14,
+				storyId: 5,
 				sourceUrl:
 					'https://i.pinimg.com/736x/b8/2f/71/b82f71f0d630b22d9c00caae71a72094.jpg',
 			},
 			{
-				storyId: 14,
+				storyId: 4,
 				sourceUrl:
 					'https://i.pinimg.com/736x/76/2e/3a/762e3ae3e9ee0f35c1fc21463a5fe3f4.jpg',
 			},
@@ -292,6 +295,8 @@ async function down() {
 	await prisma.$executeRaw`TRUNCATE TABLE "Ingredient" RESTART IDENTITY CASCADE`;
 	await prisma.$executeRaw`TRUNCATE TABLE "Product" RESTART IDENTITY CASCADE`;
 	await prisma.$executeRaw`TRUNCATE TABLE "ProductItem" RESTART IDENTITY CASCADE`;
+	await prisma.$executeRaw`TRUNCATE TABLE "StoryItem" RESTART IDENTITY CASCADE`;
+	await prisma.$executeRaw`TRUNCATE TABLE "Story" RESTART IDENTITY CASCADE`;
 }
 async function main() {
 	try {

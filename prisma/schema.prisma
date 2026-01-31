@@ -163,8 +163,8 @@ model Story {
 model StoryItem {
     id Int @id @default(autoincrement())
 
-    storyId Int
     story   Story @relation(fields: [storyId], references: [id])
+    storyId Int
 
     sourceUrl String
 

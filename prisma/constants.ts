@@ -69,69 +69,69 @@ export const _ingredients = [
 ].map((obj, index) => ({ id: index + 1, ...obj }));
 export const products = [
 	{
-		name: 'Product 1',
+		name: 'Call of Duty: Modern Warfare III',
 		categoryId: 1,
 		imageUrl:
-			'https://e7.pngegg.com/pngimages/1008/303/png-clipart-shopping-cart-icon-product-return-shopping-cart-retail-supermarket-thumbnail.png',
+			'https://upload.wikimedia.org/wikipedia/ru/a/ad/Call_of_Duty_Modern_Warfare_3_box_art.jpg',
 	},
 	{
-		name: 'Product 2',
+		name: 'Warzone',
 		categoryId: 1,
 		imageUrl:
-			'https://e7.pngegg.com/pngimages/1008/303/png-clipart-shopping-cart-icon-product-return-shopping-cart-retail-supermarket-thumbnail.png',
+			'https://upload.wikimedia.org/wikipedia/en/6/65/COD_Warzone_Cover_Art.jpg',
 	},
 	{
-		name: 'Product 3',
+		name: 'Black Ops 6',
 		categoryId: 2,
 		imageUrl:
-			'https://e7.pngegg.com/pngimages/1008/303/png-clipart-shopping-cart-icon-product-return-shopping-cart-retail-supermarket-thumbnail.png',
+			'https://upload.wikimedia.org/wikipedia/en/c/c9/Call_of_Duty_Black_Ops_6_Key_Art.png',
 	},
 	{
-		name: 'Product 4',
+		name: 'Minecraft',
 		categoryId: 2,
 		imageUrl:
-			'https://e7.pngegg.com/pngimages/1008/303/png-clipart-shopping-cart-icon-product-return-shopping-cart-retail-supermarket-thumbnail.png',
+			'https://upload.wikimedia.org/wikipedia/en/b/b6/Minecraft_2024_cover_art.png',
 	},
 	{
-		name: 'Product 5',
+		name: 'Grand Theft Auto V',
 		categoryId: 3,
 		imageUrl:
-			'https://e7.pngegg.com/pngimages/1008/303/png-clipart-shopping-cart-icon-product-return-shopping-cart-retail-supermarket-thumbnail.png',
+			'https://upload.wikimedia.org/wikipedia/en/a/a5/Grand_Theft_Auto_V.png',
 	},
 	{
-		name: 'Product 6',
+		name: 'Helldivers 2',
 		categoryId: 3,
 		imageUrl:
-			'https://e7.pngegg.com/pngimages/1008/303/png-clipart-shopping-cart-icon-product-return-shopping-cart-retail-supermarket-thumbnail.png',
+			'https://upload.wikimedia.org/wikipedia/en/e/e7/Helldivers2cover.png',
 	},
 	{
-		name: 'Product 7',
+		name: 'Diablo IV',
 		categoryId: 4,
 		imageUrl:
-			'https://e7.pngegg.com/pngimages/1008/303/png-clipart-shopping-cart-icon-product-return-shopping-cart-retail-supermarket-thumbnail.png',
+			'https://upload.wikimedia.org/wikipedia/en/1/1c/Diablo_IV_cover_art.png',
 	},
 	{
-		name: 'Product 8',
+		name: 'Kingdom Come: Deliverance 2',
 		categoryId: 5,
 		imageUrl:
-			'https://e7.pngegg.com/pngimages/1008/303/png-clipart-shopping-cart-icon-product-return-shopping-cart-retail-supermarket-thumbnail.png',
+			'https://upload.wikimedia.org/wikipedia/en/3/32/Kingdom_Come_Deliverance_II.jpg',
 	},
 	{
-		name: 'Product 9',
+		name: 'Doom: The Dark Ages',
 		categoryId: 6,
 		imageUrl:
-			'https://e7.pngegg.com/pngimages/1008/303/png-clipart-shopping-cart-icon-product-return-shopping-cart-retail-supermarket-thumbnail.png',
+			'https://upload.wikimedia.org/wikipedia/en/7/7f/DOOM%2C_The_Dark_Ages_Game_Cover.jpeg',
 	},
 	{
-		name: 'Product 10',
+		name: 'Clair Obscur: Expedition 33',
 		categoryId: 7,
 		imageUrl:
-			'https://e7.pngegg.com/pngimages/1008/303/png-clipart-shopping-cart-icon-product-return-shopping-cart-retail-supermarket-thumbnail.png',
+			'https://upload.wikimedia.org/wikipedia/en/thumb/5/5a/Clair_Obscur%2C_Expedition_33_Cover_1.webp/272px-Clair_Obscur%2C_Expedition_33_Cover_1.webp.png',
 	},
 	{
-		name: 'Product 11',
+		name: 'Wuchang: Fallen Feathers',
 		categoryId: 8,
 		imageUrl:
-			'https://e7.pngegg.com/pngimages/1008/303/png-clipart-shopping-cart-icon-product-return-shopping-cart-retail-supermarket-thumbnail.png',
+			'https://upload.wikimedia.org/wikipedia/en/c/c4/Wuchang_Fallen_Feathers_cover_art.jpg',
 	},
 ];

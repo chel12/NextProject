@@ -61,7 +61,7 @@ export const ChooseGameForm: React.FC<Props> = ({
 				className,
 				'flex flex-col items-center overflow-y-auto max-h-screen lg:max-h-none',
 			)}>
-			<GameImage imageUrl={imageUrl} size={gamePlatform} />
+			<GameImage imageUrl={imageUrl} />
 			<div className="w-full max-w-[490px] bg-[#F7F6F5] p-4 lg:p-7 rounded-xl">
 				<Title text={name} size="md" className="font-extrabold mb-1" />
 				<p className="text-gray-400">{textDetails}</p>
